@@ -2,8 +2,8 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ch.krizi.utilities.parametercheck</groupId>
-	<artifactId>ParameterCheck</artifactId>
-	<name>ParameterCheck</name>
+	<artifactId>ParameterCheckSpring</artifactId>
+	<name>ParameterCheckSpring</name>
 
 	<parent>
 		<groupId>ch.krizi.utilities.parametercheck</groupId>
@@ -18,6 +18,10 @@
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>ch.krizi.utilities.parametercheck</groupId>
+			<artifactId>ParameterCheck</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
@@ -83,6 +87,13 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<argLine>-javaagent:${settings.localRepository}/org/springframework/spring-instrument/${spring.version}/spring-instrument-${spring.version}.jar</argLine>
+				</configuration>
+			</plugin>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-eclipse-plugin</artifactId>

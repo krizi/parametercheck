@@ -3,16 +3,14 @@
  */
 package ch.krizi.utility.parametercheck.factory;
 
-import java.lang.annotation.Annotation;
-
-import ch.krizi.utility.parametercheck.AbstractParameterHandler;
+import ch.krizi.utility.parametercheck.Parameter;
+import ch.krizi.utility.parametercheck.handler.AbstractParameterHandler;
 
 /**
  * @author krizi
  * 
  */
 public interface ParameterHandlerFactoryHelper {
-	public AbstractParameterHandler<?> createParameterHandler(
-			Class<? extends AbstractParameterHandler<?>> parameterHandlerClass,
-			Object parameter, Class<?> parameterClass, Annotation annotation);
+	public AbstractParameterHandler<?, ?> createParameterHandler(
+			Class<? extends AbstractParameterHandler<?, ?>> parameterHandlerClass, Parameter<?, ?> parameter);
 }

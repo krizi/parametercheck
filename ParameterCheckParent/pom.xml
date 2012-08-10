@@ -21,21 +21,6 @@
 		<java.version>1.6</java.version>
 	</properties>
 
-	<repositories>
-		<repository>
-			<releases>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-				<checksumPolicy>warn</checksumPolicy>
-			</releases>
-			<id>clapper-org-maven-repo</id>
-			<name>org.clapper Maven Repo</name>
-			<url>http://maven.clapper.org/</url>
-			<layout>default</layout>
-		</repository>
-	</repositories>
-
-
 	<build>
 		<pluginManagement>
 			<plugins>
@@ -79,6 +64,21 @@
 	</build>
 	<dependencyManagement>
 		<dependencies>
+			<dependency>
+				<groupId>ch.krizi.utilities.parametercheck</groupId>
+				<artifactId>ParameterCheck</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>ch.krizi.utilities.parametercheck</groupId>
+				<artifactId>ParameterCheckSpring</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>ch.krizi.utilities.parametercheck</groupId>
+				<artifactId>ParameterCheckHandler</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-log4j12</artifactId>
@@ -146,5 +146,8 @@
 
 	<modules>
 		<module>../ParameterCheck</module>
+		<module>../ParameterCheckHandler</module>
+		<module>../ParameterCheckSpring</module>
+		<module>../ParameterCheckTest</module>
 	</modules>
 </project>

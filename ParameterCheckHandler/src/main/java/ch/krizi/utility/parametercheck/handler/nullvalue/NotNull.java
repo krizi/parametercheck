@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ch.krizi.utility.parametercheck.nullvalue.annotation;
+package ch.krizi.utility.parametercheck.handler.nullvalue;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -10,7 +10,6 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import ch.krizi.utility.parametercheck.annotation.ParameterCheck;
-import ch.krizi.utility.parametercheck.nullvalue.NullValueParameterHandler;
 
 /**
  * @author krizi
@@ -23,5 +22,5 @@ import ch.krizi.utility.parametercheck.nullvalue.NullValueParameterHandler;
 public @interface NotNull {
 	HandleNull handleNull() default HandleNull.ThrowException;
 
-	String message() default "";
+	String message() default "parameter is null";
 }

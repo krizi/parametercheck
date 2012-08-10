@@ -1,12 +1,12 @@
 /**
  * 
  */
-package ch.krizi.utility.parametercheck.nullvalue;
+package ch.krizi.utility.parametercheck.handler.nullvalue;
 
-import ch.krizi.utility.parametercheck.AbstractParameterHandler;
+import ch.krizi.utility.parametercheck.Parameter;
 import ch.krizi.utility.parametercheck.annotation.ParameterHandler;
 import ch.krizi.utility.parametercheck.exception.ParameterHandlerException;
-import ch.krizi.utility.parametercheck.nullvalue.annotation.NotNull;
+import ch.krizi.utility.parametercheck.handler.AbstractParameterHandler;
 
 /**
  * checks if the object is null. if it is null, it will be handled by the
@@ -17,11 +17,10 @@ import ch.krizi.utility.parametercheck.nullvalue.annotation.NotNull;
  * 
  */
 @ParameterHandler
-public class NullValueParameterHandler extends AbstractParameterHandler<NotNull> {
+public class NullValueParameterHandler extends AbstractParameterHandler<Object, NotNull> {
 
-	public NullValueParameterHandler(Object object, Class<?> clazz,
-			NotNull notNull) {
-		super(object, clazz, notNull);
+	public NullValueParameterHandler(Parameter<Object, NotNull> parameter) {
+		super(parameter);
 	}
 
 	/*
@@ -31,9 +30,9 @@ public class NullValueParameterHandler extends AbstractParameterHandler<NotNull>
 	 */
 	@Override
 	public Object check() {
-		Object newInstance = object;
-		if (annotation != null) {
-			newInstance = handleObject(annotation, object, objectClass);
+		Object newInstance = parameter.getObject();
+		if (parameter.getAnnotation() != null) {
+			newInstance = handleObject(parameter.getAnnotation(), parameter.getObject(), parameter.getObjectClass());
 		}
 		return newInstance;
 	}
@@ -48,8 +47,7 @@ public class NullValueParameterHandler extends AbstractParameterHandler<NotNull>
 				try {
 					instance = clazz.newInstance();
 				} catch (Exception e) {
-					throw new ParameterHandlerException(
-							"failed to create new instance", e);
+					throw new ParameterHandlerException("failed to create new instance", e);
 				}
 				break;
 
