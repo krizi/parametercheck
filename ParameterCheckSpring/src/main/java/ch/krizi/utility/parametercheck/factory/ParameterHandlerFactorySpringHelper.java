@@ -36,6 +36,7 @@ public class ParameterHandlerFactorySpringHelper implements ParameterHandlerFact
 		return simpleName.substring(0, 1).toLowerCase() + simpleName.substring(1, simpleName.length());
 	}
 
+	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) {
 		this.applicationContext = applicationContext;
 	}

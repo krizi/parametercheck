@@ -39,6 +39,7 @@ public class DefaultParameterHandlerFactory implements ParameterHandlerFactory {
 		this.parameterHandlerFactoryHelper = parameterHandlerFactoryHelper;
 	}
 
+	@Override
 	public List<AbstractParameterHandler<?, ?>> createParameterHandler(Object object, Class<?> objectClass,
 			Annotation... annotations) {
 		if (logger.isTraceEnabled()) {
