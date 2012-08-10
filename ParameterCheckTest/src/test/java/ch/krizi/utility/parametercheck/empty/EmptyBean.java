@@ -20,8 +20,8 @@ public class EmptyBean {
 	public void testEmptyListThrowException(@NotEmpty List<?> list) {
 
 	}
-	
+
 	public void testEmptyMapThrowException(@NotEmpty Map<?, ?> map) {
-		
+
 	}
 }

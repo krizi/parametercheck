@@ -18,7 +18,7 @@ import ch.krizi.utility.parametercheck.annotation.ParameterCheck;
 @ParameterCheck(NullValueParameterHandler.class)
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.PARAMETER, ElementType.ANNOTATION_TYPE})
+@Target({ ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
 public @interface NotNull {
 	HandleNull handleNull() default HandleNull.ThrowException;
 
