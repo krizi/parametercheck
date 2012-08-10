@@ -2,8 +2,8 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ch.krizi.utilities.parametercheck</groupId>
-	<artifactId>ParameterCheckTest</artifactId>
-	<name>ParameterCheckTest</name>
+	<artifactId>ParameterCheckAspect</artifactId>
+	<name>ParameterCheckAspect</name>
 
 	<parent>
 		<groupId>ch.krizi.utilities.parametercheck</groupId>
@@ -20,15 +20,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>ch.krizi.utilities.parametercheck</groupId>
-			<artifactId>ParameterCheckSpring</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>ch.krizi.utilities.parametercheck</groupId>
-			<artifactId>ParameterCheckHandler</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>ch.krizi.utilities.parametercheck</groupId>
-			<artifactId>ParameterCheckAspect</artifactId>
+			<artifactId>ParameterCheck</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -43,36 +35,16 @@
 			<artifactId>cglib</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-beans</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-aop</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-instrument</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-tx</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.aspectj</groupId>
 			<artifactId>aspectjtools</artifactId>
 		</dependency>
+		<!-- <dependency> -->
+		<!-- <groupId>org.aspectj</groupId> -->
+		<!-- <artifactId>aspectjrt</artifactId> -->
+		<!-- </dependency> -->
 		<dependency>
-			<groupId>org.aspectj</groupId>
-			<artifactId>aspectjrt</artifactId>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
 		</dependency>
 	</dependencies>
 
@@ -95,14 +67,6 @@
 					</execution>
 				</executions>
 			</plugin>
-			
-			<plugin>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-					<argLine>-javaagent:${settings.localRepository}/org/springframework/spring-instrument/${spring.version}/spring-instrument-${spring.version}.jar</argLine>
-				</configuration>
-			</plugin>
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-eclipse-plugin</artifactId>
