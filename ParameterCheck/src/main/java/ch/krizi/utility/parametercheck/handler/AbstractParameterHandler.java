@@ -3,7 +3,7 @@
  */
 package ch.krizi.utility.parametercheck.handler;
 
-import ch.krizi.utility.parametercheck.Parameter;
+import ch.krizi.utility.parametercheck.exception.ParameterCheckException;
 
 /**
  * @author krizi
@@ -11,11 +11,11 @@ import ch.krizi.utility.parametercheck.Parameter;
  */
 public abstract class AbstractParameterHandler<C, A> {
 
-	protected final Parameter<C, A> parameter;
+	protected final ParameterHandlerValue<C, A> parameter;
 
-	public AbstractParameterHandler(Parameter<C, A> parameter) {
+	public AbstractParameterHandler(ParameterHandlerValue<C, A> parameter) {
 		this.parameter = parameter;
 	}
 
-	public abstract Object check();
+	public abstract Object check() throws ParameterCheckException;
 }

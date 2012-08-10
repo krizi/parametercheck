@@ -1,5 +1,6 @@
 package ch.krizi.utility.parametercheck.aspect;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,9 +11,8 @@ import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.MethodParameter;
 
-import ch.krizi.utility.parametercheck.exception.ParameterHandlerException;
+import ch.krizi.utility.parametercheck.exception.ParameterCheckException;
 import ch.krizi.utility.parametercheck.factory.ParameterHandlerFactory;
 import ch.krizi.utility.parametercheck.handler.AbstractParameterHandler;
 
@@ -41,23 +41,29 @@ public class ParameterCheckAspect {
 	 */
 	@Before("execution(public * *(.., @(@ch.krizi.utility.parametercheck.annotation.ParameterCheck *) (*), ..))")
 	public void checkParams(JoinPoint joinPoint) throws Throwable {
-		List<MethodParameter> methodParameter = getMethodParameters(joinPoint);
+		List<MethodParameter> methodParameter = createMethodParameter(joinPoint);
 
 		for (MethodParameter mp : methodParameter) {
-			if (logger.isDebugEnabled()) {
-				logger.debug("Type {}, Annotation {}", mp.getParameterType(), mp.getParameterAnnotations());
+			if (logger.isTraceEnabled()) {
+				logger.trace("MethodParameter {}", mp);
 			}
 
 			List<AbstractParameterHandler<?, ?>> parameterHandler = parameterHandlerFactory.createParameterHandler(
-					getObject(mp), mp.getParameterType(), mp.getParameterAnnotations());
+					mp.getObject(), mp.getType(), mp.getAnnotations());
+
+			if (logger.isDebugEnabled()) {
+				logger.debug("Parameter [{}] will be handled by these ParameterHandler [{}] ", new Object[] { mp,
+						parameterHandler.toArray() });
+			}
 
 			for (AbstractParameterHandler<?, ?> aph : parameterHandler) {
 				try {
 					aph.check();
 
 					// update parameter
-
-				} catch (ParameterHandlerException e) {
+				} catch (ParameterCheckException e) {
+					throw e.getCause();
+				} catch (Exception e) {
 					if (logger.isErrorEnabled()) {
 						logger.error("error while handling parameter", e);
 					}
@@ -72,22 +78,28 @@ public class ParameterCheckAspect {
 	}
 
 	private Object getObject(MethodParameter methodParameter) {
+
+		// methodParameter.getMethod().
+
 		return null;
 	}
 
-	private List<MethodParameter> getMethodParameters(JoinPoint joinPoint) throws Exception {
+	private List<MethodParameter> createMethodParameter(JoinPoint joinPoint) throws Exception {
 		MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+		String[] parameterNames = signature.getParameterNames();
+		Class<?>[] parameterTypes = signature.getParameterTypes();
+		Object[] args = joinPoint.getArgs();
 		String methodName = signature.getMethod().getName();
-		Class<?>[] parameterTypes = signature.getMethod().getParameterTypes();
 		Method method = joinPoint.getTarget().getClass().getMethod(methodName, parameterTypes);
+		Annotation[][] annotations = method.getParameterAnnotations();
 
-		int paramIndex = 0;
-		List<MethodParameter> methodParameter = new ArrayList<MethodParameter>();
-		for (Class<?> pt : parameterTypes) {
-			methodParameter.add(new MethodParameter(method, paramIndex));
-			paramIndex = paramIndex + 1;
+		List<MethodParameter> methodParameterList = new ArrayList<MethodParameter>();
+		for (int i = 0; i < parameterNames.length; i++) {
+			MethodParameter methodParameter = new MethodParameter(parameterNames[i], parameterTypes[i], args[i],
+					annotations[i]);
+			methodParameterList.add(methodParameter);
 		}
 
-		return methodParameter;
+		return methodParameterList;
 	}
 }

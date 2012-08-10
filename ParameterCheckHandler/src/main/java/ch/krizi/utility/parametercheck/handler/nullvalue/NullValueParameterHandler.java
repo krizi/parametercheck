@@ -3,10 +3,14 @@
  */
 package ch.krizi.utility.parametercheck.handler.nullvalue;
 
-import ch.krizi.utility.parametercheck.Parameter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import ch.krizi.utility.parametercheck.annotation.ParameterHandler;
+import ch.krizi.utility.parametercheck.exception.ParameterCheckException;
 import ch.krizi.utility.parametercheck.exception.ParameterHandlerException;
 import ch.krizi.utility.parametercheck.handler.AbstractParameterHandler;
+import ch.krizi.utility.parametercheck.handler.ParameterHandlerValue;
 
 /**
  * checks if the object is null. if it is null, it will be handled by the
@@ -19,7 +23,9 @@ import ch.krizi.utility.parametercheck.handler.AbstractParameterHandler;
 @ParameterHandler
 public class NullValueParameterHandler extends AbstractParameterHandler<Object, NotNull> {
 
-	public NullValueParameterHandler(Parameter<Object, NotNull> parameter) {
+	private static final Logger logger = LoggerFactory.getLogger(NullValueParameterHandler.class);
+
+	public NullValueParameterHandler(ParameterHandlerValue<Object, NotNull> parameter) {
 		super(parameter);
 	}
 
@@ -30,6 +36,9 @@ public class NullValueParameterHandler extends AbstractParameterHandler<Object, 
 	 */
 	@Override
 	public Object check() {
+		if (logger.isDebugEnabled()) {
+			logger.debug("Parameter: {}", parameter);
+		}
 		Object newInstance = parameter.getObject();
 		if (parameter.getAnnotation() != null) {
 			newInstance = handleObject(parameter.getAnnotation(), parameter.getObject(), parameter.getObjectClass());
@@ -52,7 +61,7 @@ public class NullValueParameterHandler extends AbstractParameterHandler<Object, 
 				break;
 
 			case ThrowException:
-				throw new IllegalArgumentException(notNull.message());
+				throw new ParameterCheckException(new IllegalArgumentException(notNull.message()));
 			}
 		}
 		return instance;

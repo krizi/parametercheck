@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:aop="http://www.springframework.org/schema/aop"
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:aop="http://www.springframework.org/schema/aop"
 	xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
@@ -10,18 +9,15 @@
 	<context:annotation-config />
 	<context:component-scan base-package="ch.krizi" />
 
-	<bean id="parameterCheckAspect"
-		class="ch.krizi.utility.parametercheck.aspect.ParameterCheckAspect">
+	<bean id="parameterCheckAspect" class="ch.krizi.utility.parametercheck.aspect.ParameterCheckAspect">
 		<property name="parameterHandlerFactory" ref="parameterHandlerFactory" />
 	</bean>
 
-	<bean id="parameterHandlerFactory"
-		class="ch.krizi.utility.parametercheck.factory.ParameterHandlerFactory">
-		<property name="parameterHandlerFactoryHelper" ref="parameterHandlerFactorySpringHelper" />
+	<bean id="parameterHandlerFactory" class="ch.krizi.utility.parametercheck.factory.DefaultParameterHandlerFactory">
+		<constructor-arg ref="parameterHandlerFactorySpringHelper" />
 	</bean>
 
-	<bean id="parameterHandlerFactorySpringHelper"
-		class="ch.krizi.utility.parametercheck.factory.ParameterHandlerFactorySpringHelper" />
+	<bean id="parameterHandlerFactorySpringHelper" class="ch.krizi.utility.parametercheck.factory.ParameterHandlerFactorySpringHelper" />
 
 	<bean id="nullBean" class="ch.krizi.utility.parametercheck.nullvalue.NullBean" />
 </beans>

@@ -3,8 +3,8 @@
  */
 package ch.krizi.utility.parametercheck.factory;
 
-import ch.krizi.utility.parametercheck.Parameter;
 import ch.krizi.utility.parametercheck.handler.AbstractParameterHandler;
+import ch.krizi.utility.parametercheck.handler.ParameterHandlerValue;
 
 /**
  * @author krizi
@@ -12,5 +12,5 @@ import ch.krizi.utility.parametercheck.handler.AbstractParameterHandler;
  */
 public interface ParameterHandlerFactoryHelper {
 	public AbstractParameterHandler<?, ?> createParameterHandler(
-			Class<? extends AbstractParameterHandler<?, ?>> parameterHandlerClass, Parameter<?, ?> parameter);
+			Class<? extends AbstractParameterHandler<?, ?>> parameterHandlerClass, ParameterHandlerValue<?, ?> parameter);
 }
