@@ -9,7 +9,8 @@
 	<context:annotation-config />
 	<context:component-scan base-package="ch.krizi" />
 
-	<bean id="parameterCheckAspect" class="ch.krizi.utility.parametercheck.aspect.ParameterCheckAspect">
+	<bean id="parameterCheckAspect" class="ch.krizi.utility.parametercheck.aspect.ParameterCheckAspect"
+		factory-method="aspectOf">
 		<property name="parameterHandlerFactory" ref="parameterHandlerFactory" />
 	</bean>
 
