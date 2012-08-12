@@ -15,7 +15,7 @@ public class MethodParameter {
 	private final int parameterIndex;
 	private final String name;
 	private final Class<?> type;
-	private final Object object;
+	private Object object;
 	private final Annotation[] annotations;
 
 	public MethodParameter(int parameterIndex, String name, Class<?> type, Object object, Annotation... annotations) {
@@ -29,7 +29,7 @@ public class MethodParameter {
 	public int getParameterIndex() {
 		return parameterIndex;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
@@ -40,6 +40,10 @@ public class MethodParameter {
 
 	public Object getObject() {
 		return object;
+	}
+
+	public void setObject(Object object) {
+		this.object = object;
 	}
 
 	public Annotation[] getAnnotations() {

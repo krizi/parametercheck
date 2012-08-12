@@ -16,7 +16,6 @@ import mockit.integration.junit4.JMockit;
 
 import org.aspectj.lang.JoinPoint;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -46,6 +45,9 @@ public class ParameterCheckAspectTest {
 
 	@Mocked
 	private AbstractParameterHandler<?, ?> mockAbstractParameterHandler;
+
+	@Mocked
+	private TestParameterHandler<?, ?> mockTestParameterHandler;
 
 	@Mocked
 	private ParameterCheckException mockParameterCheckException;
@@ -123,22 +125,29 @@ public class ParameterCheckAspectTest {
 
 		parameterCheckAspect.checkParams(mockJoinPoint);
 
-		// verify logger
+		new Verifications() {
+			{
+				mockAbstractParameterHandler.check();
+				times = 1;
+
+				mockJoinPointUtils.createMethodParameter((JoinPoint) any);
+				times = 1;
+			}
+		};
 	}
 
 	@Test
-	@Ignore
-	public <PH extends AbstractParameterHandler<?, ?> & ParameterHandlerUpdater> void testParameterUpdater(
-			final PH mockParameterHandler) throws Throwable {
+	public void testParameterUpdater() throws Throwable {
 		new NonStrictExpectations() {
 			{
-				mockParameterHandler.getUpdatedParameter();
+				mockTestParameterHandler.getUpdatedParameter();
 				result = new Object();
 			}
 		};
 
 		List<AbstractParameterHandler<?, ?>> list1 = new ArrayList<AbstractParameterHandler<?, ?>>();
-		list1.add(mockParameterHandler);
+		list1.add(mockTestParameterHandler);
+		list1.add(mockAbstractParameterHandler);
 		setParameterHandler(list1);
 
 		ArrayList<MethodParameter> list = new ArrayList<MethodParameter>();
@@ -147,9 +156,21 @@ public class ParameterCheckAspectTest {
 
 		parameterCheckAspect.checkParams(mockJoinPoint);
 
+//		new Verifications() {
+//			{
+//				mockTestParameterHandler.check();
+//				times = 1;
+//			}
+//		};
 		new Verifications() {
 			{
-				mockParameterHandler.getUpdatedParameter();
+				mockAbstractParameterHandler.check();
+				times = 1;
+			}
+		};
+		new Verifications() {
+			{
+				mockTestParameterHandler.getUpdatedParameter();
 				times = 1;
 			}
 		};

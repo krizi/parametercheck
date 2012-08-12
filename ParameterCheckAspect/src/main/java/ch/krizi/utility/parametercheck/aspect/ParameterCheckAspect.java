@@ -63,6 +63,7 @@ public class ParameterCheckAspect {
 								logger.debug("Parameter updated: old=[{}], new=[{}]", mp.getObject(), updatedParameter);
 							}
 							JoinPointUtils.updateMethodParameter(joinPoint, mp, updatedParameter);
+							mp.setObject(updatedParameter);
 						} else {
 							if (logger.isDebugEnabled()) {
 								logger.debug("ParameterHandler [{}] is not able to update Parameter", handler);

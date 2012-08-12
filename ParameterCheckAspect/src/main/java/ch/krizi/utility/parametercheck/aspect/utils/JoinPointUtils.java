@@ -10,6 +10,8 @@ import java.util.List;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import ch.krizi.utility.parametercheck.factory.MethodParameter;
 
@@ -18,6 +20,7 @@ import ch.krizi.utility.parametercheck.factory.MethodParameter;
  * 
  */
 public class JoinPointUtils {
+	private static final Logger logger = LoggerFactory.getLogger(JoinPointUtils.class);
 
 	public static List<MethodParameter> createMethodParameter(JoinPoint joinPoint) throws Exception {
 		MethodSignature signature = (MethodSignature) joinPoint.getSignature();
@@ -40,5 +43,9 @@ public class JoinPointUtils {
 	public static void updateMethodParameter(JoinPoint joinPoint, MethodParameter methodParameter, Object updatedObject) {
 		Object[] arguments = joinPoint.getArgs();
 		arguments[methodParameter.getParameterIndex()] = updatedObject;
+		if (logger.isDebugEnabled()) {
+			logger.debug("update Parameter [{}] with this new Object [{}]", methodParameter.getParameterIndex(),
+					updatedObject);
+		}
 	}
 }
