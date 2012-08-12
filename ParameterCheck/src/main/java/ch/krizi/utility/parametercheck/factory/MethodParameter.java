@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ch.krizi.utility.parametercheck.aspect;
+package ch.krizi.utility.parametercheck.factory;
 
 import java.lang.annotation.Annotation;
 
@@ -17,7 +17,7 @@ public class MethodParameter {
 	private final Object object;
 	private final Annotation[] annotations;
 
-	public MethodParameter(String name, Class<?> type, Object object, Annotation[] annotations) {
+	public MethodParameter(String name, Class<?> type, Object object, Annotation... annotations) {
 		this.name = name;
 		this.type = type;
 		this.object = object;
@@ -38,6 +38,16 @@ public class MethodParameter {
 
 	public Annotation[] getAnnotations() {
 		return annotations;
+	}
+
+	@SuppressWarnings("unchecked")
+	public <A> A getAnnotation(Class<A> annotation) {
+		for (Annotation a : annotations) {
+			if (a.annotationType().equals(annotation)) {
+				return (A) a;
+			}
+		}
+		return null;
 	}
 
 	@Override

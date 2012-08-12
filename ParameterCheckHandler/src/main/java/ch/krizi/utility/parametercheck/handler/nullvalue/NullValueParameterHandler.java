@@ -9,9 +9,9 @@ import org.slf4j.LoggerFactory;
 import ch.krizi.utility.parametercheck.annotation.ParameterHandler;
 import ch.krizi.utility.parametercheck.exception.ParameterCheckException;
 import ch.krizi.utility.parametercheck.exception.ParameterHandlerException;
+import ch.krizi.utility.parametercheck.factory.MethodParameter;
 import ch.krizi.utility.parametercheck.handler.AbstractParameterHandler;
 import ch.krizi.utility.parametercheck.handler.ParameterHandlerUpdater;
-import ch.krizi.utility.parametercheck.handler.ParameterHandlerValue;
 
 /**
  * checks if the object is null. if it is null, it will be handled by the
@@ -27,8 +27,8 @@ public class NullValueParameterHandler extends AbstractParameterHandler<Object, 
 
 	private static final Logger logger = LoggerFactory.getLogger(NullValueParameterHandler.class);
 
-	public NullValueParameterHandler(ParameterHandlerValue<Object, NotNull> parameter) {
-		super(parameter);
+	public NullValueParameterHandler(MethodParameter methodParameter) {
+		super(methodParameter);
 	}
 
 	/*
@@ -39,12 +39,12 @@ public class NullValueParameterHandler extends AbstractParameterHandler<Object, 
 	@Override
 	public void check() throws ParameterCheckException {
 		if (logger.isDebugEnabled()) {
-			logger.debug("Parameter: {}", parameter);
+			logger.debug("Parameter: {}", methodParameter);
 		}
 		validateParameter();
 
-		if (parameter.getAnnotation() != null) {
-			handleObject(parameter.getAnnotation(), parameter.getObject(), parameter.getObjectClass());
+		if (methodParameter.getAnnotation(NotNull.class) != null) {
+			handleObject(methodParameter.getAnnotation(NotNull.class), methodParameter.getObject(), methodParameter.getType());
 		}
 	}
 
@@ -52,18 +52,18 @@ public class NullValueParameterHandler extends AbstractParameterHandler<Object, 
 	public Object getUpdatedParameter() {
 		validateParameter();
 
-		return createNewInstance(parameter.getAnnotation(), parameter.getObject(), parameter.getObjectClass());
+		return createNewInstance(methodParameter.getAnnotation(NotNull.class), methodParameter.getObject(), methodParameter.getType());
 	}
 
 	/**
 	 * checks if the parameter is acceptable with the annotation
 	 */
 	protected void validateParameter() {
-		if (parameter == null) {
+		if (methodParameter == null) {
 			throw new ParameterHandlerException("Parameter should not be null");
 		}
 
-		NotNull annotation = parameter.getAnnotation();
+		NotNull annotation = methodParameter.getAnnotation(NotNull.class);
 		if (annotation == null) {
 			throw new ParameterHandlerException("Annotation should not be null");
 		} else if (annotation.handleNull() == null) {
@@ -71,7 +71,7 @@ public class NullValueParameterHandler extends AbstractParameterHandler<Object, 
 		}
 
 		if (HandleNull.CreateInstance.equals(annotation.handleNull())) {
-			Class<Object> objectClass = parameter.getObjectClass();
+			Class<?> objectClass = methodParameter.getType();
 			Class<?> newInstance = annotation.newInstance();
 			if (objectClass.isInterface()) {
 				if (isDefaultAnnotationNewInstance(annotation)) {

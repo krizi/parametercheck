@@ -19,8 +19,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import ch.krizi.utility.JoinPointUtils;
+import ch.krizi.utility.parametercheck.aspect.utils.JoinPointUtils;
 import ch.krizi.utility.parametercheck.exception.ParameterCheckException;
+import ch.krizi.utility.parametercheck.factory.MethodParameter;
 import ch.krizi.utility.parametercheck.factory.ParameterHandlerFactory;
 import ch.krizi.utility.parametercheck.handler.AbstractParameterHandler;
 
@@ -67,7 +68,7 @@ public class ParameterCheckAspectTest {
 	private void setParameterHandler(final List list) {
 		new NonStrictExpectations() {
 			{
-				mockParameterHandlerFactory.createParameterHandler(any, (Class) any, (Annotation[]) any);
+				mockParameterHandlerFactory.createParameterHandler((MethodParameter) any);
 				result = list;
 			}
 		};

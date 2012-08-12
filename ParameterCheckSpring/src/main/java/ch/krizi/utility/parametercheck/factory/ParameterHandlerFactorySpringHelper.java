@@ -7,7 +7,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
 import ch.krizi.utility.parametercheck.handler.AbstractParameterHandler;
-import ch.krizi.utility.parametercheck.handler.ParameterHandlerValue;
 
 /**
  * @author krizi
@@ -26,9 +25,9 @@ public class ParameterHandlerFactorySpringHelper implements ParameterHandlerFact
 	 */
 	@Override
 	public AbstractParameterHandler<?, ?> createParameterHandler(
-			Class<? extends AbstractParameterHandler<?, ?>> parameterHandlerClass, ParameterHandlerValue<?, ?> parameter) {
+			Class<? extends AbstractParameterHandler<?, ?>> parameterHandlerClass, MethodParameter methodParameter) {
 		return (AbstractParameterHandler<?, ?>) applicationContext.getBean(toSpringBean(parameterHandlerClass),
-				parameter);
+				methodParameter);
 	}
 
 	private String toSpringBean(Class<?> clazz) {

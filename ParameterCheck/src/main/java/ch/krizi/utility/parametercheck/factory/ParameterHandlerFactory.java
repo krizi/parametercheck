@@ -3,7 +3,6 @@
  */
 package ch.krizi.utility.parametercheck.factory;
 
-import java.lang.annotation.Annotation;
 import java.util.List;
 
 import ch.krizi.utility.parametercheck.handler.AbstractParameterHandler;
@@ -13,6 +12,5 @@ import ch.krizi.utility.parametercheck.handler.AbstractParameterHandler;
  * 
  */
 public interface ParameterHandlerFactory {
-	public List<AbstractParameterHandler<?, ?>> createParameterHandler(Object object, Class<?> objectClass,
-			Annotation... annotations);
+	public List<AbstractParameterHandler<?, ?>> createParameterHandler(MethodParameter methodParameter);
 }

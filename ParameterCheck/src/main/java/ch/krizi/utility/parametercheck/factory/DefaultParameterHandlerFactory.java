@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
 
 import ch.krizi.utility.parametercheck.annotation.ParameterCheck;
 import ch.krizi.utility.parametercheck.handler.AbstractParameterHandler;
-import ch.krizi.utility.parametercheck.handler.ParameterHandlerValue;
 
 /**
  * @author krizi
@@ -41,14 +40,14 @@ public class DefaultParameterHandlerFactory implements ParameterHandlerFactory {
 	}
 
 	@Override
-	public List<AbstractParameterHandler<?, ?>> createParameterHandler(Object object, Class<?> objectClass,
-			Annotation... annotations) {
+	public List<AbstractParameterHandler<?, ?>> createParameterHandler(MethodParameter methodParameter) {
 		if (logger.isTraceEnabled()) {
-			logger.trace("class={}, object={}, annotations={}", new Object[] { objectClass, object, annotations });
+			logger.trace("class={}, object={}, annotations={}", new Object[] { methodParameter.getType(),
+					methodParameter.getObject(), methodParameter.getAnnotations() });
 		}
 		List<AbstractParameterHandler<?, ?>> handlerList = new ArrayList<AbstractParameterHandler<?, ?>>();
 
-		addAnnotationsRekursiv(object, objectClass, handlerList, annotations);
+		addAnnotationsRekursiv(handlerList, methodParameter, methodParameter.getAnnotations());
 
 		return handlerList;
 	}
@@ -72,8 +71,8 @@ public class DefaultParameterHandlerFactory implements ParameterHandlerFactory {
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	protected void addAnnotationsRekursiv(Object object, Class<?> objectClass,
-			List<AbstractParameterHandler<?, ?>> handlerList, Annotation... annotations) {
+	protected void addAnnotationsRekursiv(List<AbstractParameterHandler<?, ?>> handlerList,
+			MethodParameter methodParameter, Annotation... annotations) {
 		if (!ArrayUtils.isEmpty(annotations)) {
 			for (Annotation anno : annotations) {
 				Class<? extends Annotation> annotationType = anno.annotationType();
@@ -89,7 +88,7 @@ public class DefaultParameterHandlerFactory implements ParameterHandlerFactory {
 							if (logger.isDebugEnabled()) {
 								logger.debug("Annotation has other ParameterCheck Annotation");
 							}
-							addAnnotationsRekursiv(object, objectClass, handlerList, annotationType.getAnnotations());
+							addAnnotationsRekursiv(handlerList, methodParameter, annotationType.getAnnotations());
 						}
 
 						if (logger.isDebugEnabled()) {
@@ -97,10 +96,9 @@ public class DefaultParameterHandlerFactory implements ParameterHandlerFactory {
 						}
 						Class<? extends AbstractParameterHandler<?, ?>> handlerClass = parameterCheck.value();
 
-						ParameterHandlerValue<?, ?> parameter = new ParameterHandlerValue(objectClass, object, anno);
 						try {
 							AbstractParameterHandler<?, ?> parameterHandlerInstance = parameterHandlerFactoryHelper
-									.createParameterHandler(handlerClass, parameter);
+									.createParameterHandler(handlerClass, methodParameter);
 
 							if (logger.isDebugEnabled()) {
 								logger.debug("create new ParameterHandler {}", parameterHandlerInstance.getClass());

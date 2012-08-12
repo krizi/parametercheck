@@ -13,7 +13,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<spring.version>3.1.1.RELEASE</spring.version>
 		<spring-agent.version>2.5.4</spring-agent.version>
-		<aspectj.version>1.6.12</aspectj.version>
+		<aspectj.version>1.6.7</aspectj.version>
 		<aspectjrt.version>1.5.4</aspectjrt.version>
 		<cglib.version>2.2</cglib.version>
 		<slf4j-log4j12>1.6.4</slf4j-log4j12>
@@ -48,16 +48,16 @@
 						<target>${java.version}</target>
 					</configuration>
 				</plugin>
-				<plugin>
-					<artifactId>maven-surefire-plugin</artifactId>
-					<version>2.12.1</version>
-					<configuration>
-						<argLine>
-							-javaagent:"${settings.localRepository}"/com/googlecode/jmockit/jmockit/${jmockit.version}/jmockit-${jmockit.version}.jar
-							-javaagent:${settings.localRepository}/org/springframework/spring-instrument/${spring.version}/spring-instrument-${spring.version}.jar
-						</argLine>
-					</configuration>
-				</plugin>
+<!-- 				<plugin> -->
+<!-- 					<artifactId>maven-surefire-plugin</artifactId> -->
+<!-- 					<version>2.12.1</version> -->
+<!-- 					<configuration> -->
+<!-- 						<argLine> -->
+<!-- 							-javaagent:"${settings.localRepository}"/com/googlecode/jmockit/jmockit/${jmockit.version}/jmockit-${jmockit.version}.jar -->
+<!-- 							-javaagent:"${setting.localRepository}"/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar							 -->
+<!-- 						</argLine> -->
+<!-- 					</configuration> -->
+<!-- 				</plugin> -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-eclipse-plugin</artifactId>
@@ -68,19 +68,19 @@
 						<downloadJavadocs>true</downloadJavadocs>
 						<buildcommands>
 							<buildcommand>org.eclipse.jdt.core.javabuilder</buildcommand>
-							<!-- <buildCommand> -->
-							<!-- <name>org.eclipse.ajdt.core.ajbuilder</name> -->
-							<!-- <arguments> -->
-							<!-- <aspectPath>org.springframework.aspects</aspectPath> -->
-							<!-- </arguments> -->
-							<!-- </buildCommand> -->
+							<buildCommand>
+								<name>org.eclipse.ajdt.core.ajbuilder</name>
+								<arguments>
+									<aspectPath>org.springframework.aspects</aspectPath>
+								</arguments>
+							</buildCommand>
 							<buildCommand>
 								<name>org.springframework.ide.eclipse.core.springbuilder</name>
 							</buildCommand>
 						</buildcommands>
 						<additionalProjectnatures>
 							<projectnature>org.eclipse.jdt.core.javanature</projectnature>
-							<!-- <projectnature>org.eclipse.ajdt.ui.ajnature</projectnature> -->
+							<projectnature>org.eclipse.ajdt.ui.ajnature</projectnature>
 							<projectnature>org.springframework.ide.eclipse.core.springnature</projectnature>
 						</additionalProjectnatures>
 					</configuration>
@@ -160,6 +160,11 @@
 
 			<dependency>
 				<groupId>org.aspectj</groupId>
+				<artifactId>aspectjweaver</artifactId>
+				<version>${aspectj.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.aspectj</groupId>
 				<artifactId>aspectjtools</artifactId>
 				<version>${aspectj.version}</version>
 			</dependency>
@@ -185,6 +190,17 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.googlecode.jmockit</groupId>
+			<artifactId>jmockit</artifactId>
+		</dependency>
+	</dependencies>
 
 	<modules>
 		<module>../ParameterCheck</module>

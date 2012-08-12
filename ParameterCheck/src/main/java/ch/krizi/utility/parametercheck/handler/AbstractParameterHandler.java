@@ -4,6 +4,7 @@
 package ch.krizi.utility.parametercheck.handler;
 
 import ch.krizi.utility.parametercheck.exception.ParameterCheckException;
+import ch.krizi.utility.parametercheck.factory.MethodParameter;
 
 /**
  * @author krizi
@@ -11,10 +12,10 @@ import ch.krizi.utility.parametercheck.exception.ParameterCheckException;
  */
 public abstract class AbstractParameterHandler<C, A> {
 
-	protected final ParameterHandlerValue<C, A> parameter;
+	protected final MethodParameter methodParameter;
 
-	public AbstractParameterHandler(ParameterHandlerValue<C, A> parameter) {
-		this.parameter = parameter;
+	public AbstractParameterHandler(MethodParameter methodParameter) {
+		this.methodParameter = methodParameter;
 	}
 
 	public abstract void check() throws ParameterCheckException;

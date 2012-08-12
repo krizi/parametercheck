@@ -1,5 +1,6 @@
 package ch.krizi.utility.parametercheck.aspect;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -9,8 +10,9 @@ import org.aspectj.lang.annotation.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ch.krizi.utility.JoinPointUtils;
+import ch.krizi.utility.parametercheck.aspect.utils.JoinPointUtils;
 import ch.krizi.utility.parametercheck.exception.ParameterCheckException;
+import ch.krizi.utility.parametercheck.factory.MethodParameter;
 import ch.krizi.utility.parametercheck.factory.ParameterHandlerFactory;
 import ch.krizi.utility.parametercheck.handler.AbstractParameterHandler;
 
@@ -43,8 +45,8 @@ public class ParameterCheckAspect {
 					logger.trace("MethodParameter {}", mp);
 				}
 
-				List<AbstractParameterHandler<?, ?>> parameterHandler = parameterHandlerFactory.createParameterHandler(
-						mp.getObject(), mp.getType(), mp.getAnnotations());
+				List<AbstractParameterHandler<?, ?>> parameterHandler = parameterHandlerFactory
+						.createParameterHandler(mp);
 
 				if (logger.isDebugEnabled()) {
 					logger.debug("Parameter [{}] will be handled by these ParameterHandler [{}] ", new Object[] { mp,
@@ -54,7 +56,6 @@ public class ParameterCheckAspect {
 				for (AbstractParameterHandler<?, ?> aph : parameterHandler) {
 					try {
 						aph.check();
-						
 
 						// update parameter
 					} catch (ParameterCheckException e) {

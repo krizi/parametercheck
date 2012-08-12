@@ -1,7 +1,7 @@
 /**
  * 
  */
-package ch.krizi.utility;
+package ch.krizi.utility.parametercheck.aspect.utils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -11,7 +11,7 @@ import java.util.List;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
 
-import ch.krizi.utility.parametercheck.aspect.MethodParameter;
+import ch.krizi.utility.parametercheck.factory.MethodParameter;
 
 /**
  * @author krizi

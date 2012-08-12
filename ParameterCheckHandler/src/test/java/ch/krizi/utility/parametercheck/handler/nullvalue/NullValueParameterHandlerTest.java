@@ -22,7 +22,7 @@ import org.junit.runner.RunWith;
 
 import ch.krizi.utility.parametercheck.exception.ParameterCheckException;
 import ch.krizi.utility.parametercheck.exception.ParameterHandlerException;
-import ch.krizi.utility.parametercheck.handler.ParameterHandlerValue;
+import ch.krizi.utility.parametercheck.factory.MethodParameter;
 
 /**
  * @author krizi
@@ -34,8 +34,7 @@ public class NullValueParameterHandlerTest {
 
 	@Mocked
 	@Injectable
-	private ParameterHandlerValue<Object, NotNull> mockParameterHandlerValue;
-
+	private MethodParameter mockMethodParameter;
 	@Tested
 	private NullValueParameterHandler handler;
 
@@ -46,7 +45,7 @@ public class NullValueParameterHandlerTest {
 	public void prepare() {
 		new NonStrictExpectations() {
 			{
-				mockParameterHandlerValue.getAnnotation();
+				mockMethodParameter.getAnnotation((Class<?>) any);
 				result = mockNotNull;
 			}
 		};
@@ -82,7 +81,7 @@ public class NullValueParameterHandlerTest {
 	public void throwsParameterHandlerExceptionWhenAnnotationIsNull() {
 		new NonStrictExpectations() {
 			{
-				mockParameterHandlerValue.getAnnotation();
+				mockMethodParameter.getAnnotation((Class) any);
 				result = null;
 			}
 		};
@@ -165,7 +164,7 @@ public class NullValueParameterHandlerTest {
 	private void expectedClass(final Class clazz) {
 		new NonStrictExpectations() {
 			{
-				mockParameterHandlerValue.getObjectClass();
+				mockMethodParameter.getType();
 				result = clazz;
 			}
 		};
