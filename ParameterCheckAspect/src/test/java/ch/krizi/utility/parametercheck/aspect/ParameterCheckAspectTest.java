@@ -127,6 +127,7 @@ public class ParameterCheckAspectTest {
 	}
 
 	@Test
+	@Ignore
 	public <PH extends AbstractParameterHandler<?, ?> & ParameterHandlerUpdater> void testParameterUpdater(
 			final PH mockParameterHandler) throws Throwable {
 		new NonStrictExpectations() {
