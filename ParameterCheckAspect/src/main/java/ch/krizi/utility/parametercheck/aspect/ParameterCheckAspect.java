@@ -1,6 +1,5 @@
 package ch.krizi.utility.parametercheck.aspect;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
@@ -15,6 +14,7 @@ import ch.krizi.utility.parametercheck.exception.ParameterCheckException;
 import ch.krizi.utility.parametercheck.factory.MethodParameter;
 import ch.krizi.utility.parametercheck.factory.ParameterHandlerFactory;
 import ch.krizi.utility.parametercheck.handler.AbstractParameterHandler;
+import ch.krizi.utility.parametercheck.handler.ParameterHandlerUpdater;
 
 /**
  * Matches all Annotation wich are annotated with
@@ -53,11 +53,21 @@ public class ParameterCheckAspect {
 							parameterHandler.toArray() });
 				}
 
-				for (AbstractParameterHandler<?, ?> aph : parameterHandler) {
+				for (AbstractParameterHandler<?, ?> handler : parameterHandler) {
 					try {
-						aph.check();
-
-						// update parameter
+						handler.check();
+						if (ParameterHandlerUpdater.class.isInstance(handler)) {
+							ParameterHandlerUpdater updater = (ParameterHandlerUpdater) handler;
+							Object updatedParameter = updater.getUpdatedParameter();
+							if (logger.isDebugEnabled()) {
+								logger.debug("Parameter updated: old=[{}], new=[{}]", mp.getObject(), updatedParameter);
+							}
+							JoinPointUtils.updateMethodParameter(joinPoint, mp, updatedParameter);
+						} else {
+							if (logger.isDebugEnabled()) {
+								logger.debug("ParameterHandler [{}] is not able to update Parameter", handler);
+							}
+						}
 					} catch (ParameterCheckException e) {
 						throw e.getCause();
 					} catch (Exception e) {
@@ -72,18 +82,6 @@ public class ParameterCheckAspect {
 				logger.warn("there are no parameters... Aspect should not catch");
 			}
 		}
-	}
-
-	private void updateParameter(JoinPoint joinPoint, MethodParameter methodParameter, Object newInstance) {
-		Object[] args = joinPoint.getArgs();
-
-	}
-
-	private Object getObject(MethodParameter methodParameter) {
-
-		// methodParameter.getMethod().
-
-		return null;
 	}
 
 	public void setParameterHandlerFactory(ParameterHandlerFactory parameterHandlerFactory) {

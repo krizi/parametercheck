@@ -29,7 +29,7 @@ public class JoinPointUtils {
 
 		List<MethodParameter> methodParameterList = new ArrayList<MethodParameter>();
 		for (int i = 0; i < parameterNames.length; i++) {
-			MethodParameter methodParameter = new MethodParameter(parameterNames[i], parameterTypes[i], args[i],
+			MethodParameter methodParameter = new MethodParameter(i, parameterNames[i], parameterTypes[i], args[i],
 					annotations[i]);
 			methodParameterList.add(methodParameter);
 		}
@@ -37,4 +37,8 @@ public class JoinPointUtils {
 		return methodParameterList;
 	}
 
+	public static void updateMethodParameter(JoinPoint joinPoint, MethodParameter methodParameter, Object updatedObject) {
+		Object[] arguments = joinPoint.getArgs();
+		arguments[methodParameter.getParameterIndex()] = updatedObject;
+	}
 }

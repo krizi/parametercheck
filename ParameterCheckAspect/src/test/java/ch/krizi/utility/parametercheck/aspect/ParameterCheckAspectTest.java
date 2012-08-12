@@ -3,7 +3,6 @@
  */
 package ch.krizi.utility.parametercheck.aspect;
 
-import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,10 +11,12 @@ import mockit.Injectable;
 import mockit.Mocked;
 import mockit.NonStrictExpectations;
 import mockit.Tested;
+import mockit.Verifications;
 import mockit.integration.junit4.JMockit;
 
 import org.aspectj.lang.JoinPoint;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -24,6 +25,7 @@ import ch.krizi.utility.parametercheck.exception.ParameterCheckException;
 import ch.krizi.utility.parametercheck.factory.MethodParameter;
 import ch.krizi.utility.parametercheck.factory.ParameterHandlerFactory;
 import ch.krizi.utility.parametercheck.handler.AbstractParameterHandler;
+import ch.krizi.utility.parametercheck.handler.ParameterHandlerUpdater;
 
 /**
  * @author krizi
@@ -54,9 +56,11 @@ public class ParameterCheckAspectTest {
 
 	@Before
 	public void prepare() throws Exception {
+
 	}
 
-	private void setMethodParameter(final List list) throws Exception {
+	@SuppressWarnings("static-access")
+	private void setMethodParameter(final List<?> list) throws Exception {
 		new NonStrictExpectations() {
 			{
 				mockJoinPointUtils.createMethodParameter((JoinPoint) any);
@@ -65,7 +69,7 @@ public class ParameterCheckAspectTest {
 		};
 	}
 
-	private void setParameterHandler(final List list) {
+	private void setParameterHandler(final List<?> list) {
 		new NonStrictExpectations() {
 			{
 				mockParameterHandlerFactory.createParameterHandler((MethodParameter) any);
@@ -84,12 +88,12 @@ public class ParameterCheckAspectTest {
 
 	@Test
 	public void testWithOneValidParameter() throws Throwable {
-		List list1 = new ArrayList();
+		List<AbstractParameterHandler<?, ?>> list1 = new ArrayList<AbstractParameterHandler<?, ?>>();
 		list1.add(mockAbstractParameterHandler);
 		setParameterHandler(list1);
 
 		ArrayList<MethodParameter> list = new ArrayList<MethodParameter>();
-		list.add(new MethodParameter("myMethod", List.class, null, null));
+		list.add(new MethodParameter(0, "myMethod", List.class, null));
 		setMethodParameter(list);
 
 		parameterCheckAspect.checkParams(mockJoinPoint);
@@ -109,12 +113,12 @@ public class ParameterCheckAspectTest {
 			}
 		};
 
-		List list1 = new ArrayList();
+		List<AbstractParameterHandler<?, ?>> list1 = new ArrayList<AbstractParameterHandler<?, ?>>();
 		list1.add(mockAbstractParameterHandler);
 		setParameterHandler(list1);
 
 		ArrayList<MethodParameter> list = new ArrayList<MethodParameter>();
-		list.add(new MethodParameter("myMethod", List.class, null, null));
+		list.add(new MethodParameter(0, "myMethod", List.class, null));
 		setMethodParameter(list);
 
 		parameterCheckAspect.checkParams(mockJoinPoint);
@@ -122,4 +126,32 @@ public class ParameterCheckAspectTest {
 		// verify logger
 	}
 
+	@Test
+	public <PH extends AbstractParameterHandler<?, ?> & ParameterHandlerUpdater> void testParameterUpdater(
+			final PH mockParameterHandler) throws Throwable {
+		new NonStrictExpectations() {
+			{
+				mockParameterHandler.getUpdatedParameter();
+				result = new Object();
+			}
+		};
+
+		List<AbstractParameterHandler<?, ?>> list1 = new ArrayList<AbstractParameterHandler<?, ?>>();
+		list1.add(mockParameterHandler);
+		setParameterHandler(list1);
+
+		ArrayList<MethodParameter> list = new ArrayList<MethodParameter>();
+		list.add(new MethodParameter(0, "myMethod", List.class, null));
+		setMethodParameter(list);
+
+		parameterCheckAspect.checkParams(mockJoinPoint);
+
+		new Verifications() {
+			{
+				mockParameterHandler.getUpdatedParameter();
+				times = 1;
+			}
+		};
+
+	}
 }

@@ -32,7 +32,7 @@ public class MethodParameterTest {
 
 	@Before
 	public void prepare() {
-		methodParameter = new MethodParameter("test", Documented.class, new Object(), mockDocumented, mockTarget);
+		methodParameter = new MethodParameter(0, "test", Documented.class, new Object(), mockDocumented, mockTarget);
 	}
 
 	@Test

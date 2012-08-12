@@ -12,18 +12,24 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  * 
  */
 public class MethodParameter {
+	private final int parameterIndex;
 	private final String name;
 	private final Class<?> type;
 	private final Object object;
 	private final Annotation[] annotations;
 
-	public MethodParameter(String name, Class<?> type, Object object, Annotation... annotations) {
+	public MethodParameter(int parameterIndex, String name, Class<?> type, Object object, Annotation... annotations) {
+		this.parameterIndex = parameterIndex;
 		this.name = name;
 		this.type = type;
 		this.object = object;
 		this.annotations = annotations;
 	}
 
+	public int getParameterIndex() {
+		return parameterIndex;
+	}
+	
 	public String getName() {
 		return name;
 	}

@@ -10,7 +10,7 @@ import ch.krizi.utility.parametercheck.factory.MethodParameter;
  * @author krizi
  * 
  */
-public abstract class AbstractParameterHandler<C, A> {
+public abstract class AbstractParameterHandler<C, A> implements ParameterHandlerCheck {
 
 	protected final MethodParameter methodParameter;
 

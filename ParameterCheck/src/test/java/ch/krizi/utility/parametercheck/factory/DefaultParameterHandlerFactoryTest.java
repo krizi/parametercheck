@@ -73,7 +73,7 @@ public class DefaultParameterHandlerFactoryTest {
 				result = Documented.class;
 			}
 		};
-		MethodParameter methodParameter = new MethodParameter("name", List.class, new ArrayList(), annotation);
+		MethodParameter methodParameter = new MethodParameter(0, "name", List.class, new ArrayList(), annotation);
 		List<AbstractParameterHandler<?, ?>> parameterHandler = factory.createParameterHandler(methodParameter);
 
 		assertThat(parameterHandler, notNullValue());
@@ -98,7 +98,7 @@ public class DefaultParameterHandlerFactoryTest {
 
 		try {
 
-			MethodParameter methodParameter = new MethodParameter("name", List.class, new ArrayList(), annotation);
+			MethodParameter methodParameter = new MethodParameter(0, "name", List.class, new ArrayList(), annotation);
 			factory.createParameterHandler(methodParameter);
 		} catch (Throwable e) {
 			e.printStackTrace();
