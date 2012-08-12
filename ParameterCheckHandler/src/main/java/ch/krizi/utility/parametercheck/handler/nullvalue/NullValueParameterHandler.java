@@ -10,6 +10,7 @@ import ch.krizi.utility.parametercheck.annotation.ParameterHandler;
 import ch.krizi.utility.parametercheck.exception.ParameterCheckException;
 import ch.krizi.utility.parametercheck.exception.ParameterHandlerException;
 import ch.krizi.utility.parametercheck.handler.AbstractParameterHandler;
+import ch.krizi.utility.parametercheck.handler.ParameterHandlerUpdater;
 import ch.krizi.utility.parametercheck.handler.ParameterHandlerValue;
 
 /**
@@ -21,7 +22,8 @@ import ch.krizi.utility.parametercheck.handler.ParameterHandlerValue;
  * 
  */
 @ParameterHandler
-public class NullValueParameterHandler extends AbstractParameterHandler<Object, NotNull> {
+public class NullValueParameterHandler extends AbstractParameterHandler<Object, NotNull> implements
+		ParameterHandlerUpdater {
 
 	private static final Logger logger = LoggerFactory.getLogger(NullValueParameterHandler.class);
 
@@ -35,36 +37,80 @@ public class NullValueParameterHandler extends AbstractParameterHandler<Object, 
 	 * @see ch.krizi.utility.parametercheck.ParameterHandler#check()
 	 */
 	@Override
-	public Object check() {
+	public void check() throws ParameterCheckException {
 		if (logger.isDebugEnabled()) {
 			logger.debug("Parameter: {}", parameter);
 		}
-		Object newInstance = parameter.getObject();
+		validateParameter();
+
 		if (parameter.getAnnotation() != null) {
-			newInstance = handleObject(parameter.getAnnotation(), parameter.getObject(), parameter.getObjectClass());
+			handleObject(parameter.getAnnotation(), parameter.getObject(), parameter.getObjectClass());
 		}
-		return newInstance;
 	}
 
-	@SuppressWarnings("unchecked")
-	protected <T> T handleObject(NotNull notNull, Object object, Class<T> clazz) {
-		T instance = (T) object;
+	@Override
+	public Object getUpdatedParameter() {
+		validateParameter();
 
-		if (instance == null) {
-			switch (notNull.handleNull()) {
-			case CreateInstance:
-				try {
-					instance = clazz.newInstance();
-				} catch (Exception e) {
-					throw new ParameterHandlerException("failed to create new instance", e);
+		return createNewInstance(parameter.getAnnotation(), parameter.getObject(), parameter.getObjectClass());
+	}
+
+	/**
+	 * checks if the parameter is acceptable with the annotation
+	 */
+	protected void validateParameter() {
+		if (parameter == null) {
+			throw new ParameterHandlerException("Parameter should not be null");
+		}
+
+		NotNull annotation = parameter.getAnnotation();
+		if (annotation == null) {
+			throw new ParameterHandlerException("Annotation should not be null");
+		} else if (annotation.handleNull() == null) {
+			throw new ParameterHandlerException("HandleNull should not be null");
+		}
+
+		if (HandleNull.CreateInstance.equals(annotation.handleNull())) {
+			Class<Object> objectClass = parameter.getObjectClass();
+			Class<?> newInstance = annotation.newInstance();
+			if (objectClass.isInterface()) {
+				if (isDefaultAnnotationNewInstance(annotation)) {
+					throw new ParameterHandlerException("parameter [" + objectClass
+							+ "] is a Interface, but there is no explicit class. "
+							+ "see: NotNull(newInstance=ExplicitClass.class)");
+				} else if (!objectClass.isAssignableFrom(newInstance)) {
+					throw new ParameterHandlerException("combination [parameter=" + objectClass + ", newInstance="
+							+ newInstance + "] didnt work");
 				}
-				break;
+			}
+		}
+	}
 
-			case ThrowException:
+	private boolean isDefaultAnnotationNewInstance(NotNull notNull) {
+		return NotNull.class.equals(notNull.newInstance());
+	}
+
+	protected void handleObject(NotNull notNull, Object object, Class<?> clazz) {
+		if (object == null) {
+			if (HandleNull.ThrowException.equals(notNull.handleNull())) {
 				throw new ParameterCheckException(new IllegalArgumentException(notNull.message()));
 			}
 		}
-		return instance;
+	}
+
+	protected Object createNewInstance(NotNull notNull, Object object, Class<?> clazz) {
+		if (HandleNull.CreateInstance.equals(notNull.handleNull())) {
+			try {
+				if (isDefaultAnnotationNewInstance(notNull)) {
+					return clazz.newInstance();
+				} else {
+					return notNull.newInstance().newInstance();
+				}
+			} catch (Exception e) {
+				throw new ParameterHandlerException("failed to create new instance", e);
+			}
+		}
+		return null;
 	}
 
 }

@@ -2,8 +2,8 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ch.krizi.utilities.parametercheck</groupId>
-	<artifactId>ParameterCheckCore</artifactId>
-	<name>ParameterCheckCore</name>
+	<artifactId>ParameterCheck</artifactId>
+	<name>ParameterCheck</name>
 
 	<parent>
 		<groupId>ch.krizi.utilities.parametercheck</groupId>
@@ -25,6 +25,10 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.googlecode.jmockit</groupId>
+			<artifactId>jmockit</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>cglib</groupId>

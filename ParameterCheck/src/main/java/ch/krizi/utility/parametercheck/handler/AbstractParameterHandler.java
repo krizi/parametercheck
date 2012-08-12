@@ -17,5 +17,5 @@ public abstract class AbstractParameterHandler<C, A> {
 		this.parameter = parameter;
 	}
 
-	public abstract Object check() throws ParameterCheckException;
+	public abstract void check() throws ParameterCheckException;
 }

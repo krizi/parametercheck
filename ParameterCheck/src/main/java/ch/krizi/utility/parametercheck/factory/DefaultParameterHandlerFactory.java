@@ -10,6 +10,7 @@ import java.lang.annotation.Target;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,7 +46,6 @@ public class DefaultParameterHandlerFactory implements ParameterHandlerFactory {
 		if (logger.isTraceEnabled()) {
 			logger.trace("class={}, object={}, annotations={}", new Object[] { objectClass, object, annotations });
 		}
-
 		List<AbstractParameterHandler<?, ?>> handlerList = new ArrayList<AbstractParameterHandler<?, ?>>();
 
 		addAnnotationsRekursiv(object, objectClass, handlerList, annotations);
@@ -62,6 +62,9 @@ public class DefaultParameterHandlerFactory implements ParameterHandlerFactory {
 	protected boolean isIgnored(Class<? extends Annotation> annotationType) {
 		for (Class<? extends Annotation> a : IGNORED_ANNOTATIONS) {
 			if (a.equals(annotationType)) {
+				if (logger.isTraceEnabled()) {
+					logger.trace("Annotation ignored...");
+				}
 				return true;
 			}
 		}
@@ -71,54 +74,60 @@ public class DefaultParameterHandlerFactory implements ParameterHandlerFactory {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected void addAnnotationsRekursiv(Object object, Class<?> objectClass,
 			List<AbstractParameterHandler<?, ?>> handlerList, Annotation... annotations) {
-		for (Annotation anno : annotations) {
-			Class<? extends Annotation> annotationType = anno.annotationType();
-			if (!isIgnored(annotationType)) {
-				ParameterCheck parameterCheck = annotationType.getAnnotation(ParameterCheck.class);
+		if (!ArrayUtils.isEmpty(annotations)) {
+			for (Annotation anno : annotations) {
+				Class<? extends Annotation> annotationType = anno.annotationType();
+				if (!isIgnored(annotationType)) {
+					ParameterCheck parameterCheck = annotationType.getAnnotation(ParameterCheck.class);
 
-				if (logger.isTraceEnabled()) {
-					logger.trace("Annotation={}, Annotations={}", anno, parameterCheck);
-				}
-
-				if (hasParameterCheckAnnotations(anno)) {
-					if (logger.isDebugEnabled()) {
-						logger.debug("Annotation has other ParameterCheck Annotation");
+					if (logger.isTraceEnabled()) {
+						logger.trace("Annotation={}, ParameterCheck={}", anno, parameterCheck);
 					}
-					addAnnotationsRekursiv(object, objectClass, handlerList, annotationType.getAnnotations());
-				}
 
-				if (annotationType.isAnnotationPresent(ParameterCheck.class)) {
-					if (logger.isDebugEnabled()) {
-						logger.debug("ParameterCheck={}, ParameterAnnotation={}", parameterCheck, anno);
-					}
-					Class<? extends AbstractParameterHandler<?, ?>> handlerClass = parameterCheck.value();
-
-					ParameterHandlerValue<?, ?> parameter = new ParameterHandlerValue(objectClass, object, anno);
-					try {
-						AbstractParameterHandler<?, ?> parameterHandlerInstance = parameterHandlerFactoryHelper
-								.createParameterHandler(handlerClass, parameter);
+					if (annotationType.isAnnotationPresent(ParameterCheck.class)) {
+						if (hasParameterCheckAnnotations(anno)) {
+							if (logger.isDebugEnabled()) {
+								logger.debug("Annotation has other ParameterCheck Annotation");
+							}
+							addAnnotationsRekursiv(object, objectClass, handlerList, annotationType.getAnnotations());
+						}
 
 						if (logger.isDebugEnabled()) {
-							logger.debug("create new ParameterHandler {}", parameterHandlerInstance.getClass());
+							logger.debug("ParameterCheck={}, ParameterAnnotation={}", parameterCheck, anno);
 						}
-						handlerList.add(parameterHandlerInstance);
-					} catch (Exception e) {
-						if (logger.isErrorEnabled()) {
-							logger.error(
-									"cant create new instance of {}, ParameterCheck {}, Annotation {}, Exception {}",
-									new Object[] { handlerClass, parameterCheck, anno, e });
+						Class<? extends AbstractParameterHandler<?, ?>> handlerClass = parameterCheck.value();
+
+						ParameterHandlerValue<?, ?> parameter = new ParameterHandlerValue(objectClass, object, anno);
+						try {
+							AbstractParameterHandler<?, ?> parameterHandlerInstance = parameterHandlerFactoryHelper
+									.createParameterHandler(handlerClass, parameter);
+
+							if (logger.isDebugEnabled()) {
+								logger.debug("create new ParameterHandler {}", parameterHandlerInstance.getClass());
+							}
+							handlerList.add(parameterHandlerInstance);
+						} catch (Exception e) {
+							if (logger.isErrorEnabled()) {
+								logger.error(
+										"cant create new instance of {}, ParameterCheck {}, Annotation {}, Exception {}",
+										new Object[] { handlerClass, parameterCheck, anno, e });
+							}
+						}
+					} else {
+						if (logger.isWarnEnabled()) {
+							logger.warn("Parameter-Annotation is wrong [ParameterCheck={}, ParameterAnnotation={}]",
+									parameterCheck, anno);
 						}
 					}
 				} else {
-					if (logger.isWarnEnabled()) {
-						logger.warn("Parameter-Annotation is wrong [ParameterCheck={}, ParameterAnnotation={}]",
-								parameterCheck, anno);
+					if (logger.isTraceEnabled()) {
+						logger.trace("Annotation [{}] will be ignored", annotationType);
 					}
 				}
-			} else {
-				if (logger.isTraceEnabled()) {
-					logger.trace("Annotation [{}] will be ignored", annotationType);
-				}
+			}
+		} else {
+			if (logger.isTraceEnabled()) {
+				logger.trace("no annoataions");
 			}
 		}
 	}

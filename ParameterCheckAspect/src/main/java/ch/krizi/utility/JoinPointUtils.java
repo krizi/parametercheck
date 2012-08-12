@@ -1,0 +1,40 @@
+/**
+ * 
+ */
+package ch.krizi.utility;
+
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.reflect.MethodSignature;
+
+import ch.krizi.utility.parametercheck.aspect.MethodParameter;
+
+/**
+ * @author krizi
+ * 
+ */
+public class JoinPointUtils {
+
+	public static List<MethodParameter> createMethodParameter(JoinPoint joinPoint) throws Exception {
+		MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+		String[] parameterNames = signature.getParameterNames();
+		Class<?>[] parameterTypes = signature.getParameterTypes();
+		Object[] args = joinPoint.getArgs();
+		Method method = signature.getMethod();
+		Annotation[][] annotations = method.getParameterAnnotations();
+
+		List<MethodParameter> methodParameterList = new ArrayList<MethodParameter>();
+		for (int i = 0; i < parameterNames.length; i++) {
+			MethodParameter methodParameter = new MethodParameter(parameterNames[i], parameterTypes[i], args[i],
+					annotations[i]);
+			methodParameterList.add(methodParameter);
+		}
+
+		return methodParameterList;
+	}
+
+}

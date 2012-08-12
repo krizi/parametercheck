@@ -23,4 +23,6 @@ public @interface NotNull {
 	HandleNull handleNull() default HandleNull.ThrowException;
 
 	String message() default "parameter is null";
+
+	Class<?> newInstance() default NotNull.class;
 }

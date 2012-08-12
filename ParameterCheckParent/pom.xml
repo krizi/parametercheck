@@ -17,11 +17,25 @@
 		<aspectjrt.version>1.5.4</aspectjrt.version>
 		<cglib.version>2.2</cglib.version>
 		<slf4j-log4j12>1.6.4</slf4j-log4j12>
+		<jmockit.version>0.999.16</jmockit.version>
 		<junit.version>4.10</junit.version>
 		<commons-collections.version>3.2.1</commons-collections.version>
 		<commons-lang.version>3.1</commons-lang.version>
 	</properties>
 
+	<profiles>
+		<profile>
+			<id>sonar</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<sonar.host.url>
+					http://0.0.0.0:9000/
+				</sonar.host.url>
+			</properties>
+		</profile>
+	</profiles>
 	<build>
 		<pluginManagement>
 			<plugins>
@@ -38,7 +52,10 @@
 					<artifactId>maven-surefire-plugin</artifactId>
 					<version>2.12.1</version>
 					<configuration>
-						<argLine>-javaagent:${settings.localRepository}/org/springframework/spring-instrument/${spring.version}/spring-instrument-${spring.version}.jar</argLine>
+						<argLine>
+							-javaagent:"${settings.localRepository}"/com/googlecode/jmockit/jmockit/${jmockit.version}/jmockit-${jmockit.version}.jar
+							-javaagent:${settings.localRepository}/org/springframework/spring-instrument/${spring.version}/spring-instrument-${spring.version}.jar
+						</argLine>
 					</configuration>
 				</plugin>
 				<plugin>
@@ -97,6 +114,12 @@
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-log4j12</artifactId>
 				<version>${slf4j-log4j12}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.googlecode.jmockit</groupId>
+				<artifactId>jmockit</artifactId>
+				<version>${jmockit.version}</version>
+				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>junit</groupId>

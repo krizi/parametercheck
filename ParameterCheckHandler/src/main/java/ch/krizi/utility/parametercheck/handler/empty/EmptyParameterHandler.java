@@ -32,14 +32,12 @@ public class EmptyParameterHandler extends AbstractParameterHandler<Object, NotE
 	}
 
 	@Override
-	public Object check() {
+	public void check() throws ParameterCheckException {
 		if (logger.isDebugEnabled()) {
 			logger.debug("Parameter: {}", parameter);
 		}
 
 		check(parameter.getObjectClass(), parameter.getObject(), parameter.getAnnotation());
-
-		return null;
 	}
 
 	protected void check(Class<?> clazz, Object object, NotEmpty notEmpty) {
