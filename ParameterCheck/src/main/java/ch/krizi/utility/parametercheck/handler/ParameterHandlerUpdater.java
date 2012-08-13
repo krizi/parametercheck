@@ -11,7 +11,7 @@ import ch.krizi.utility.parametercheck.factory.MethodParameter;
  * @author krizi
  * 
  */
-public interface ParameterHandlerUpdater {
+public interface ParameterHandlerUpdater<R> {
 	/**
 	 * get the new value
 	 * 
@@ -21,5 +21,5 @@ public interface ParameterHandlerUpdater {
 	 * @throws ParameterHandlerCheck
 	 *             throws exception if an error occurs in the handler
 	 */
-	public Object getUpdatedParameter(final MethodParameter methodParameter);
+	public R getUpdatedParameter(final MethodParameter methodParameter);
 }

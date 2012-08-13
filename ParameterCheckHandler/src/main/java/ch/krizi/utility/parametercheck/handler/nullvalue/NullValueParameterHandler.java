@@ -22,7 +22,7 @@ import ch.krizi.utility.parametercheck.handler.ParameterHandlerUpdater;
  * 
  */
 @ParameterHandler
-public class NullValueParameterHandler implements ParameterHandlerCheck, ParameterHandlerUpdater {
+public class NullValueParameterHandler implements ParameterHandlerCheck, ParameterHandlerUpdater<Object> {
 
 	private final Logger logger = LoggerFactory.getLogger(NullValueParameterHandler.class);
 
