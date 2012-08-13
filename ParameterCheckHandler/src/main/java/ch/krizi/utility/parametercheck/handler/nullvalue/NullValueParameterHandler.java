@@ -24,7 +24,7 @@ import ch.krizi.utility.parametercheck.handler.ParameterHandlerUpdater;
 @ParameterHandler
 public class NullValueParameterHandler implements ParameterHandlerCheck, ParameterHandlerUpdater {
 
-	private static final Logger logger = LoggerFactory.getLogger(NullValueParameterHandler.class);
+	private final Logger logger = LoggerFactory.getLogger(NullValueParameterHandler.class);
 
 	/*
 	 * (non-Javadoc)

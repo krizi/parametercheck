@@ -55,11 +55,17 @@ public class JoinPointUtils {
 	 * @param updatedObject
 	 */
 	public static void updateMethodParameter(JoinPoint joinPoint, MethodParameter methodParameter, Object updatedObject) {
+		if (logger.isTraceEnabled()) {
+			logger.trace("Arguments before update: {}", joinPoint.getArgs());
+		}
 		Object[] arguments = joinPoint.getArgs();
 		arguments[methodParameter.getParameterIndex()] = updatedObject;
 		if (logger.isDebugEnabled()) {
 			logger.debug("update Parameter [{}] with this new Object [{}]", methodParameter.getParameterIndex(),
 					updatedObject);
+		}
+		if (logger.isTraceEnabled()) {
+			logger.trace("Arguments after update: {}", joinPoint.getArgs());
 		}
 	}
 }

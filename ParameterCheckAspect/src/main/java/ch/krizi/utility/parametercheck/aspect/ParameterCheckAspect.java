@@ -27,7 +27,7 @@ import ch.krizi.utility.parametercheck.handler.ParameterHandlerUpdater;
 @Aspect
 public class ParameterCheckAspect {
 
-	private static final Logger logger = LoggerFactory.getLogger(ParameterCheckAspect.class);
+	private final Logger logger = LoggerFactory.getLogger(ParameterCheckAspect.class);
 
 	private ParameterHandlerFactory parameterHandlerFactory;
 

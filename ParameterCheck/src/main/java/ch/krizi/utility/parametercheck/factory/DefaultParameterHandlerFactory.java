@@ -23,7 +23,7 @@ import ch.krizi.utility.parametercheck.handler.ParameterHandlerCheck;
  */
 public class DefaultParameterHandlerFactory implements ParameterHandlerFactory {
 
-	private static final Logger logger = LoggerFactory.getLogger(DefaultParameterHandlerFactory.class);
+	private final Logger logger = LoggerFactory.getLogger(DefaultParameterHandlerFactory.class);
 
 	@SuppressWarnings("unchecked")
 	private static final Class<? extends Annotation>[] IGNORED_ANNOTATIONS = new Class[] { Target.class,

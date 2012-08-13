@@ -27,7 +27,7 @@ import ch.krizi.utility.parametercheck.handler.ParameterHandlerCheck;
 @ParameterHandler
 public class EmptyParameterHandler implements ParameterHandlerCheck {
 
-	private static final Logger logger = LoggerFactory.getLogger(EmptyParameterHandler.class);
+	private final Logger logger = LoggerFactory.getLogger(EmptyParameterHandler.class);
 
 	@Override
 	public void check(final MethodParameter methodParameter) {
