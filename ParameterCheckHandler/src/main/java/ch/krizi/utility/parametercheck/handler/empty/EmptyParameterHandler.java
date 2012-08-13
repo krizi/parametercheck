@@ -16,7 +16,7 @@ import ch.krizi.utility.parametercheck.annotation.ParameterHandler;
 import ch.krizi.utility.parametercheck.exception.ParameterCheckException;
 import ch.krizi.utility.parametercheck.exception.ParameterHandlerException;
 import ch.krizi.utility.parametercheck.factory.MethodParameter;
-import ch.krizi.utility.parametercheck.handler.AbstractParameterHandler;
+import ch.krizi.utility.parametercheck.handler.ParameterHandlerCheck;
 
 /**
  * checks Collection & Map if is empty
@@ -25,7 +25,7 @@ import ch.krizi.utility.parametercheck.handler.AbstractParameterHandler;
  * 
  */
 @ParameterHandler
-public class EmptyParameterHandler extends AbstractParameterHandler<Object, NotEmpty> {
+public class EmptyParameterHandler implements ParameterHandlerCheck {
 
 	private static final Logger logger = LoggerFactory.getLogger(EmptyParameterHandler.class);
 

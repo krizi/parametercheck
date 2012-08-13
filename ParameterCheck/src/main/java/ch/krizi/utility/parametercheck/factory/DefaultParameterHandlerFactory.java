@@ -15,7 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ch.krizi.utility.parametercheck.annotation.ParameterCheck;
-import ch.krizi.utility.parametercheck.handler.AbstractParameterHandler;
 import ch.krizi.utility.parametercheck.handler.ParameterHandlerCheck;
 
 /**

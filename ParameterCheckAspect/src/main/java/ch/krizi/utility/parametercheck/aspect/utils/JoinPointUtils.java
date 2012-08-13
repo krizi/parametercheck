@@ -22,6 +22,13 @@ import ch.krizi.utility.parametercheck.factory.MethodParameter;
 public class JoinPointUtils {
 	private static final Logger logger = LoggerFactory.getLogger(JoinPointUtils.class);
 
+	/**
+	 * create MethodParameter for all parameter for the method
+	 * 
+	 * @param joinPoint
+	 * @return
+	 * @throws Exception
+	 */
 	public static List<MethodParameter> createMethodParameter(JoinPoint joinPoint) throws Exception {
 		MethodSignature signature = (MethodSignature) joinPoint.getSignature();
 		String[] parameterNames = signature.getParameterNames();
@@ -40,6 +47,13 @@ public class JoinPointUtils {
 		return methodParameterList;
 	}
 
+	/**
+	 * update a MethodParameter
+	 * 
+	 * @param joinPoint
+	 * @param methodParameter
+	 * @param updatedObject
+	 */
 	public static void updateMethodParameter(JoinPoint joinPoint, MethodParameter methodParameter, Object updatedObject) {
 		Object[] arguments = joinPoint.getArgs();
 		arguments[methodParameter.getParameterIndex()] = updatedObject;

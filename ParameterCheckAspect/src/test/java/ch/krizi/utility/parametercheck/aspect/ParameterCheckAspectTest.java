@@ -19,12 +19,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import ch.krizi.utility.parametercheck.annotation.ParameterHandler;
 import ch.krizi.utility.parametercheck.aspect.utils.JoinPointUtils;
 import ch.krizi.utility.parametercheck.exception.ParameterCheckException;
 import ch.krizi.utility.parametercheck.factory.MethodParameter;
 import ch.krizi.utility.parametercheck.factory.ParameterHandlerFactory;
-import ch.krizi.utility.parametercheck.handler.AbstractParameterHandler;
 import ch.krizi.utility.parametercheck.handler.ParameterHandlerCheck;
 
 /**
@@ -45,7 +43,7 @@ public class ParameterCheckAspectTest {
 	private JoinPointUtils mockJoinPointUtils;
 
 	@Mocked
-	private AbstractParameterHandler<?, ?> mockAbstractParameterHandler;
+	private ParameterHandlerCheck mockParameterHandler;
 
 	@Mocked
 	private TestParameterHandler mockTestParameterHandler;
@@ -91,8 +89,8 @@ public class ParameterCheckAspectTest {
 
 	@Test
 	public void testWithOneValidParameter() throws Throwable {
-		List<AbstractParameterHandler<?, ?>> list1 = new ArrayList<AbstractParameterHandler<?, ?>>();
-		list1.add(mockAbstractParameterHandler);
+		List<ParameterHandlerCheck> list1 = new ArrayList<ParameterHandlerCheck>();
+		list1.add(mockParameterHandler);
 		setParameterHandler(list1);
 
 		ArrayList<MethodParameter> list = new ArrayList<MethodParameter>();
@@ -111,13 +109,13 @@ public class ParameterCheckAspectTest {
 				mockParameterCheckException.getCause();
 				result = new IllegalArgumentException();
 
-				mockAbstractParameterHandler.check((MethodParameter) any);
+				mockParameterHandler.check((MethodParameter) any);
 				result = mockParameterCheckException;
 			}
 		};
 
-		List<AbstractParameterHandler<?, ?>> list1 = new ArrayList<AbstractParameterHandler<?, ?>>();
-		list1.add(mockAbstractParameterHandler);
+		List<ParameterHandlerCheck> list1 = new ArrayList<ParameterHandlerCheck>();
+		list1.add(mockParameterHandler);
 		setParameterHandler(list1);
 
 		ArrayList<MethodParameter> list = new ArrayList<MethodParameter>();
@@ -129,7 +127,7 @@ public class ParameterCheckAspectTest {
 
 		new Verifications() {
 			{
-				mockAbstractParameterHandler.check((MethodParameter) any);
+				mockParameterHandler.check((MethodParameter) any);
 				times = 1;
 
 				mockJoinPointUtils.createMethodParameter((JoinPoint) any);
@@ -149,7 +147,7 @@ public class ParameterCheckAspectTest {
 
 		List<ParameterHandlerCheck> list1 = new ArrayList<ParameterHandlerCheck>();
 		list1.add(mockTestParameterHandler);
-		list1.add(mockAbstractParameterHandler);
+		list1.add(mockParameterHandler);
 		setParameterHandler(list1);
 
 		ArrayList<MethodParameter> list = new ArrayList<MethodParameter>();

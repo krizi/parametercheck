@@ -8,6 +8,8 @@ import java.lang.annotation.Annotation;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
+ * describing a Method-Parameter. all properties are final (expect the object)
+ * 
  * @author krizi
  * 
  */

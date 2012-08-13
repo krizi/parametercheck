@@ -10,7 +10,7 @@ import ch.krizi.utility.parametercheck.annotation.ParameterHandler;
 import ch.krizi.utility.parametercheck.exception.ParameterCheckException;
 import ch.krizi.utility.parametercheck.exception.ParameterHandlerException;
 import ch.krizi.utility.parametercheck.factory.MethodParameter;
-import ch.krizi.utility.parametercheck.handler.AbstractParameterHandler;
+import ch.krizi.utility.parametercheck.handler.ParameterHandlerCheck;
 import ch.krizi.utility.parametercheck.handler.ParameterHandlerUpdater;
 
 /**
@@ -22,8 +22,7 @@ import ch.krizi.utility.parametercheck.handler.ParameterHandlerUpdater;
  * 
  */
 @ParameterHandler
-public class NullValueParameterHandler extends AbstractParameterHandler<Object, NotNull> implements
-		ParameterHandlerUpdater {
+public class NullValueParameterHandler implements ParameterHandlerCheck, ParameterHandlerUpdater {
 
 	private static final Logger logger = LoggerFactory.getLogger(NullValueParameterHandler.class);
 

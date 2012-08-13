@@ -3,6 +3,7 @@
  */
 package ch.krizi.utility.testutils;
 
+import org.junit.Ignore;
 import org.slf4j.Logger;
 
 import mockit.NonStrictExpectations;
@@ -12,6 +13,7 @@ import mockit.Verifications;
  * @author krizi
  * 
  */
+@Ignore
 public class LoggerTestUtils {
 	private final Logger logger;
 
