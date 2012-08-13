@@ -55,7 +55,7 @@ public class NullValueParameterHandlerTest {
 	public void throwsParameterCheckExceptionWhenInputNull() {
 		expectHandleNull(HandleNull.ThrowException);
 
-		handler.check();
+		handler.check(mockMethodParameter);
 	}
 
 	@Test
@@ -64,9 +64,9 @@ public class NullValueParameterHandlerTest {
 		expectNewInstanceClass(ArrayList.class);
 		expectedClass(List.class);
 
-		handler.check();
+		handler.check(mockMethodParameter);
 
-		Object object = handler.getUpdatedParameter();
+		Object object = handler.getUpdatedParameter(mockMethodParameter);
 		Assert.assertNotNull(object);
 	}
 
@@ -74,7 +74,7 @@ public class NullValueParameterHandlerTest {
 	public void throwsParameterHandlerExceptionWhenAnnotationIsWrong() {
 		expectHandleNull(null);
 
-		handler.check();
+		handler.check(mockMethodParameter);
 	}
 
 	@Test(expected = ParameterHandlerException.class)
@@ -86,13 +86,12 @@ public class NullValueParameterHandlerTest {
 			}
 		};
 
-		handler.check();
+		handler.check(mockMethodParameter);
 	}
 
 	@Test(expected = ParameterHandlerException.class)
 	public void throwsParameterHandlerExceptionWhenNoParameterAvialable() {
-		handler = new NullValueParameterHandler(null);
-		handler.check();
+		handler.check(mockMethodParameter);
 	}
 
 	@Test(expected = ParameterHandlerException.class)
@@ -121,7 +120,7 @@ public class NullValueParameterHandlerTest {
 		expectNewInstanceClass(HashMap.class);
 		expectedClass(List.class);
 
-		handler.getUpdatedParameter();
+		handler.getUpdatedParameter(mockMethodParameter);
 	}
 
 	@Test
@@ -138,7 +137,7 @@ public class NullValueParameterHandlerTest {
 		expectedClass(ArrayList.class);
 		expectNewInstanceClass(NotNull.class);
 
-		Object instance = handler.getUpdatedParameter();
+		Object instance = handler.getUpdatedParameter(mockMethodParameter);
 
 		Assert.assertNotNull(instance);
 	}

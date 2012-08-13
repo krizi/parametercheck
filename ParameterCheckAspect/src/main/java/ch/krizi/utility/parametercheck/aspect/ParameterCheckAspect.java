@@ -13,7 +13,7 @@ import ch.krizi.utility.parametercheck.aspect.utils.JoinPointUtils;
 import ch.krizi.utility.parametercheck.exception.ParameterCheckException;
 import ch.krizi.utility.parametercheck.factory.MethodParameter;
 import ch.krizi.utility.parametercheck.factory.ParameterHandlerFactory;
-import ch.krizi.utility.parametercheck.handler.AbstractParameterHandler;
+import ch.krizi.utility.parametercheck.handler.ParameterHandlerCheck;
 import ch.krizi.utility.parametercheck.handler.ParameterHandlerUpdater;
 
 /**
@@ -45,20 +45,19 @@ public class ParameterCheckAspect {
 					logger.trace("MethodParameter {}", mp);
 				}
 
-				List<AbstractParameterHandler<?, ?>> parameterHandler = parameterHandlerFactory
-						.createParameterHandler(mp);
+				List<ParameterHandlerCheck> parameterHandler = parameterHandlerFactory.createParameterHandler(mp);
 
 				if (logger.isDebugEnabled()) {
 					logger.debug("Parameter [{}] will be handled by these ParameterHandler [{}] ", new Object[] { mp,
 							parameterHandler.toArray() });
 				}
 
-				for (AbstractParameterHandler<?, ?> handler : parameterHandler) {
+				for (ParameterHandlerCheck handler : parameterHandler) {
 					try {
-						handler.check();
+						handler.check(mp);
 						if (ParameterHandlerUpdater.class.isInstance(handler)) {
 							ParameterHandlerUpdater updater = (ParameterHandlerUpdater) handler;
-							Object updatedParameter = updater.getUpdatedParameter();
+							Object updatedParameter = updater.getUpdatedParameter(mp);
 							if (logger.isDebugEnabled()) {
 								logger.debug("Parameter updated: old=[{}], new=[{}]", mp.getObject(), updatedParameter);
 							}

@@ -29,12 +29,8 @@ public class EmptyParameterHandler extends AbstractParameterHandler<Object, NotE
 
 	private static final Logger logger = LoggerFactory.getLogger(EmptyParameterHandler.class);
 
-	public EmptyParameterHandler(MethodParameter methodParameter) {
-		super(methodParameter);
-	}
-
 	@Override
-	public void check() throws ParameterCheckException {
+	public void check(final MethodParameter methodParameter) {
 		if (logger.isDebugEnabled()) {
 			logger.debug("Parameter: {}", methodParameter);
 		}

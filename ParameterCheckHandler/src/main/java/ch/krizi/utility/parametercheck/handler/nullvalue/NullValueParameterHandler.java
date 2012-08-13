@@ -27,38 +27,36 @@ public class NullValueParameterHandler extends AbstractParameterHandler<Object, 
 
 	private static final Logger logger = LoggerFactory.getLogger(NullValueParameterHandler.class);
 
-	public NullValueParameterHandler(MethodParameter methodParameter) {
-		super(methodParameter);
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
 	 * @see ch.krizi.utility.parametercheck.ParameterHandler#check()
 	 */
 	@Override
-	public void check() throws ParameterCheckException {
+	public void check(final MethodParameter methodParameter) {
 		if (logger.isDebugEnabled()) {
 			logger.debug("Parameter: {}", methodParameter);
 		}
-		validateParameter();
+		validateParameter(methodParameter);
 
 		if (methodParameter.getAnnotation(NotNull.class) != null) {
-			handleObject(methodParameter.getAnnotation(NotNull.class), methodParameter.getObject(), methodParameter.getType());
+			handleObject(methodParameter.getAnnotation(NotNull.class), methodParameter.getObject(),
+					methodParameter.getType());
 		}
 	}
 
 	@Override
-	public Object getUpdatedParameter() {
-		validateParameter();
+	public Object getUpdatedParameter(final MethodParameter methodParameter) {
+		validateParameter(methodParameter);
 
-		return createNewInstance(methodParameter.getAnnotation(NotNull.class), methodParameter.getObject(), methodParameter.getType());
+		return createNewInstance(methodParameter.getAnnotation(NotNull.class), methodParameter.getObject(),
+				methodParameter.getType());
 	}
 
 	/**
 	 * checks if the parameter is acceptable with the annotation
 	 */
-	protected void validateParameter() {
+	protected void validateParameter(final MethodParameter methodParameter) {
 		if (methodParameter == null) {
 			throw new ParameterHandlerException("Parameter should not be null");
 		}

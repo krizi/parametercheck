@@ -19,12 +19,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import ch.krizi.utility.parametercheck.annotation.ParameterHandler;
 import ch.krizi.utility.parametercheck.aspect.utils.JoinPointUtils;
 import ch.krizi.utility.parametercheck.exception.ParameterCheckException;
 import ch.krizi.utility.parametercheck.factory.MethodParameter;
 import ch.krizi.utility.parametercheck.factory.ParameterHandlerFactory;
 import ch.krizi.utility.parametercheck.handler.AbstractParameterHandler;
-import ch.krizi.utility.parametercheck.handler.ParameterHandlerUpdater;
+import ch.krizi.utility.parametercheck.handler.ParameterHandlerCheck;
 
 /**
  * @author krizi
@@ -47,7 +48,7 @@ public class ParameterCheckAspectTest {
 	private AbstractParameterHandler<?, ?> mockAbstractParameterHandler;
 
 	@Mocked
-	private TestParameterHandler<?, ?> mockTestParameterHandler;
+	private TestParameterHandler mockTestParameterHandler;
 
 	@Mocked
 	private ParameterCheckException mockParameterCheckException;
@@ -110,7 +111,7 @@ public class ParameterCheckAspectTest {
 				mockParameterCheckException.getCause();
 				result = new IllegalArgumentException();
 
-				mockAbstractParameterHandler.check();
+				mockAbstractParameterHandler.check((MethodParameter) any);
 				result = mockParameterCheckException;
 			}
 		};
@@ -120,14 +121,15 @@ public class ParameterCheckAspectTest {
 		setParameterHandler(list1);
 
 		ArrayList<MethodParameter> list = new ArrayList<MethodParameter>();
-		list.add(new MethodParameter(0, "myMethod", List.class, null));
+		MethodParameter mp = new MethodParameter(0, "myMethod", List.class, null);
+		list.add(mp);
 		setMethodParameter(list);
 
 		parameterCheckAspect.checkParams(mockJoinPoint);
 
 		new Verifications() {
 			{
-				mockAbstractParameterHandler.check();
+				mockAbstractParameterHandler.check((MethodParameter) any);
 				times = 1;
 
 				mockJoinPointUtils.createMethodParameter((JoinPoint) any);
@@ -140,12 +142,12 @@ public class ParameterCheckAspectTest {
 	public void testParameterUpdater() throws Throwable {
 		new NonStrictExpectations() {
 			{
-				mockTestParameterHandler.getUpdatedParameter();
+				mockTestParameterHandler.getUpdatedParameter((MethodParameter) any);
 				result = new Object();
 			}
 		};
 
-		List<AbstractParameterHandler<?, ?>> list1 = new ArrayList<AbstractParameterHandler<?, ?>>();
+		List<ParameterHandlerCheck> list1 = new ArrayList<ParameterHandlerCheck>();
 		list1.add(mockTestParameterHandler);
 		list1.add(mockAbstractParameterHandler);
 		setParameterHandler(list1);
@@ -156,21 +158,9 @@ public class ParameterCheckAspectTest {
 
 		parameterCheckAspect.checkParams(mockJoinPoint);
 
-//		new Verifications() {
-//			{
-//				mockTestParameterHandler.check();
-//				times = 1;
-//			}
-//		};
 		new Verifications() {
 			{
-				mockAbstractParameterHandler.check();
-				times = 1;
-			}
-		};
-		new Verifications() {
-			{
-				mockTestParameterHandler.getUpdatedParameter();
+				mockTestParameterHandler.getUpdatedParameter((MethodParameter) any);
 				times = 1;
 			}
 		};

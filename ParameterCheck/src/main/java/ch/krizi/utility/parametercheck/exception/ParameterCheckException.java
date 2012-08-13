@@ -4,6 +4,9 @@
 package ch.krizi.utility.parametercheck.exception;
 
 /**
+ * is a wrapper for the real exception. a handler should throw this exception to
+ * show that the parameter is invalid.
+ * 
  * @author krizi
  * 
  */

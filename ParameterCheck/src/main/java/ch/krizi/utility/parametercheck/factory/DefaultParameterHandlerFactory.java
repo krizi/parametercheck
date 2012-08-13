@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import ch.krizi.utility.parametercheck.annotation.ParameterCheck;
 import ch.krizi.utility.parametercheck.handler.AbstractParameterHandler;
+import ch.krizi.utility.parametercheck.handler.ParameterHandlerCheck;
 
 /**
  * @author krizi
@@ -40,12 +41,12 @@ public class DefaultParameterHandlerFactory implements ParameterHandlerFactory {
 	}
 
 	@Override
-	public List<AbstractParameterHandler<?, ?>> createParameterHandler(MethodParameter methodParameter) {
+	public List<ParameterHandlerCheck> createParameterHandler(MethodParameter methodParameter) {
 		if (logger.isTraceEnabled()) {
 			logger.trace("class={}, object={}, annotations={}", new Object[] { methodParameter.getType(),
 					methodParameter.getObject(), methodParameter.getAnnotations() });
 		}
-		List<AbstractParameterHandler<?, ?>> handlerList = new ArrayList<AbstractParameterHandler<?, ?>>();
+		List<ParameterHandlerCheck> handlerList = new ArrayList<ParameterHandlerCheck>();
 
 		addAnnotationsRekursiv(handlerList, methodParameter, methodParameter.getAnnotations());
 
@@ -71,8 +72,8 @@ public class DefaultParameterHandlerFactory implements ParameterHandlerFactory {
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	protected void addAnnotationsRekursiv(List<AbstractParameterHandler<?, ?>> handlerList,
-			MethodParameter methodParameter, Annotation... annotations) {
+	protected void addAnnotationsRekursiv(List<ParameterHandlerCheck> handlerList, MethodParameter methodParameter,
+			Annotation... annotations) {
 		if (!ArrayUtils.isEmpty(annotations)) {
 			for (Annotation anno : annotations) {
 				Class<? extends Annotation> annotationType = anno.annotationType();
@@ -94,11 +95,11 @@ public class DefaultParameterHandlerFactory implements ParameterHandlerFactory {
 						if (logger.isDebugEnabled()) {
 							logger.debug("ParameterCheck={}, ParameterAnnotation={}", parameterCheck, anno);
 						}
-						Class<? extends AbstractParameterHandler<?, ?>> handlerClass = parameterCheck.value();
+						Class<? extends ParameterHandlerCheck> handlerClass = parameterCheck.value();
 
 						try {
-							AbstractParameterHandler<?, ?> parameterHandlerInstance = parameterHandlerFactoryHelper
-									.createParameterHandler(handlerClass, methodParameter);
+							ParameterHandlerCheck parameterHandlerInstance = parameterHandlerFactoryHelper
+									.createParameterHandler(handlerClass);
 
 							if (logger.isDebugEnabled()) {
 								logger.debug("create new ParameterHandler {}", parameterHandlerInstance.getClass());

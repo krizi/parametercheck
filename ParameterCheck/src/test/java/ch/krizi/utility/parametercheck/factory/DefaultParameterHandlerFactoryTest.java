@@ -24,7 +24,7 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ch.krizi.utility.parametercheck.handler.AbstractParameterHandler;
+import ch.krizi.utility.parametercheck.handler.ParameterHandlerCheck;
 import ch.krizi.utility.testutils.LoggerTestUtils;
 
 /**
@@ -74,7 +74,7 @@ public class DefaultParameterHandlerFactoryTest {
 			}
 		};
 		MethodParameter methodParameter = new MethodParameter(0, "name", List.class, new ArrayList(), annotation);
-		List<AbstractParameterHandler<?, ?>> parameterHandler = factory.createParameterHandler(methodParameter);
+		List<ParameterHandlerCheck> parameterHandler = factory.createParameterHandler(methodParameter);
 
 		assertThat(parameterHandler, notNullValue());
 

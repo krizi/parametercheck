@@ -6,7 +6,7 @@ package ch.krizi.utility.parametercheck.factory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
-import ch.krizi.utility.parametercheck.handler.AbstractParameterHandler;
+import ch.krizi.utility.parametercheck.handler.ParameterHandlerCheck;
 
 /**
  * @author krizi
@@ -24,15 +24,8 @@ public class ParameterHandlerFactorySpringHelper implements ParameterHandlerFact
 	 * #createParameterHandler(java.lang.Class)
 	 */
 	@Override
-	public AbstractParameterHandler<?, ?> createParameterHandler(
-			Class<? extends AbstractParameterHandler<?, ?>> parameterHandlerClass, MethodParameter methodParameter) {
-		return (AbstractParameterHandler<?, ?>) applicationContext.getBean(toSpringBean(parameterHandlerClass),
-				methodParameter);
-	}
-
-	private String toSpringBean(Class<?> clazz) {
-		String simpleName = clazz.getSimpleName();
-		return simpleName.substring(0, 1).toLowerCase() + simpleName.substring(1, simpleName.length());
+	public ParameterHandlerCheck createParameterHandler(Class<? extends ParameterHandlerCheck> parameterHandlerClass) {
+		return applicationContext.getBean(parameterHandlerClass);
 	}
 
 	@Override

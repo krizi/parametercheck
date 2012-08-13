@@ -3,7 +3,7 @@
  */
 package ch.krizi.utility.parametercheck.factory;
 
-import java.util.List;
+import org.junit.Ignore;
 
 import ch.krizi.utility.parametercheck.handler.ParameterHandlerCheck;
 
@@ -11,6 +11,7 @@ import ch.krizi.utility.parametercheck.handler.ParameterHandlerCheck;
  * @author krizi
  * 
  */
-public interface ParameterHandlerFactory {
-	public List<ParameterHandlerCheck> createParameterHandler(MethodParameter methodParameter);
+@Ignore
+public abstract class TestHandler implements ParameterHandlerCheck {
+
 }

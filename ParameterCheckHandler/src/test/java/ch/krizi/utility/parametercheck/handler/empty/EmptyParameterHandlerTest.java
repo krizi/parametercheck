@@ -55,19 +55,19 @@ public class EmptyParameterHandlerTest {
 	@Test(expected = ParameterHandlerException.class)
 	public void testValidAnnotaion() {
 		expectedParameterAnnotation(null);
-		handler.check();
+		handler.check(mockMethodParameter);
 	}
 
 	@Test(expected = ParameterCheckException.class)
 	public void testNullListObject() {
 		expectedParameterClass(null, List.class);
-		handler.check();
+		handler.check(mockMethodParameter);
 	}
 
 	@Test(expected = ParameterCheckException.class)
 	public void testEmptyListObject() {
 		expectedParameterClass(new ArrayList(), List.class);
-		handler.check();
+		handler.check(mockMethodParameter);
 	}
 
 	@Test
@@ -75,19 +75,19 @@ public class EmptyParameterHandlerTest {
 		List<String> list = new ArrayList<String>();
 		list.add("test");
 		expectedParameterClass(list, List.class);
-		handler.check();
+		handler.check(mockMethodParameter);
 	}
 
 	@Test(expected = ParameterCheckException.class)
 	public void testNullMapObject() {
 		expectedParameterClass(null, Map.class);
-		handler.check();
+		handler.check(mockMethodParameter);
 	}
 
 	@Test(expected = ParameterCheckException.class)
 	public void testEmptyMapObject() {
 		expectedParameterClass(new HashMap(), Map.class);
-		handler.check();
+		handler.check(mockMethodParameter);
 	}
 
 	@Test
@@ -95,20 +95,20 @@ public class EmptyParameterHandlerTest {
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("key", "value");
 		expectedParameterClass(map, Map.class);
-		handler.check();
+		handler.check(mockMethodParameter);
 	}
 
 	@Test(expected = ParameterCheckException.class)
 	public void testEmptyString() {
 		expectedParameterClass("", String.class);
-		handler.check();
+		handler.check(mockMethodParameter);
 	}
 
 	@Test(expected = ParameterHandlerException.class)
 	public void testUnsupportedClassObject() {
 		Integer integer = new Integer(5);
 		expectedParameterClass(integer, Integer.class);
-		handler.check();
+		handler.check(mockMethodParameter);
 	}
 
 	private void expectedParameterClass(final Object object, final Class<?> clazz) {

@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
  * 
  */
 @Documented
-@Scope("prototype")
+@Scope("singleton")
 @Component
 public @interface ParameterHandler {
 
