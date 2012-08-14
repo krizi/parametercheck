@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Parametercheck : Check Parameter" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Parametercheck</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/krizi/parametercheck">View on GitHub</a>
+
+          <h1 id="project_title">Parametercheck</h1>
+          <h2 id="project_tagline">Check Parameter</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/krizi/parametercheck/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/krizi/parametercheck/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>How to Use</h1>
+
+<h2>Spring-Configuration</h2>
+
+<pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context" xmlns:aop="http://www.springframework.org/schema/aop"
+    xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd"&gt;
+
+    &lt;aop:aspectj-autoproxy /&gt;
+    &lt;context:annotation-config /&gt;
+    &lt;context:component-scan base-package="ch.krizi" /&gt;
+
+    &lt;bean id="parameterCheckAspect" class="ch.krizi.utility.parametercheck.aspect.ParameterCheckAspect"&gt;
+        &lt;property name="parameterHandlerFactory" ref="parameterHandlerFactory" /&gt;
+    &lt;/bean&gt;
+
+    &lt;bean id="parameterHandlerFactory" class="ch.krizi.utility.parametercheck.factory.DefaultParameterHandlerFactory"&gt;
+        &lt;constructor-arg ref="parameterHandlerFactorySpringHelper" /&gt;
+    &lt;/bean&gt;
+
+    &lt;bean id="parameterHandlerFactorySpringHelper" class="ch.krizi.utility.parametercheck.factory.ParameterHandlerFactorySpringHelper" /&gt;
+
+&lt;/beans&gt;
+</code></pre>
+
+<p>Thats it... </p>
+
+<p>Now you can use it everywhere in spring-managed beans... </p>
+
+<pre><code>@Component
+public class TestBean {
+    public void doSomething(@NotEmpty List&lt;?&gt; list, @NotNull Object object, @NotEmpty String value) {
+        // all params are valid... 
+    }
+}
+</code></pre>
+
+<h2>How to write custom ParameterHandler</h2>
+
+<ol>
+<li>write a Annotation</li>
+<li>write a PrameterHandler </li>
+<li>use it :)</li>
+</ol><h3>Annotation</h3>
+
+<pre><code>@Documented
+@ParameterCheck(CustomParameterHandler.class)
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ ElementType.PARAMETER, ElementType.ANNOTATION_TYPE })
+@NotNull // you can re-use other available Annotations
+public @interface CustomParameter {
+    String message() default "parameter is null";
+}
+</code></pre>
+
+<ol>
+<li><strong>you need to annotate your Annotation with @ParameterCheck.</strong></li>
+<li>@Retention(RetentionPolicy.RUNTIME) the Annotation can be read at runtime</li>
+<li>you set the <a href="https://github.com/target" class="user-mention">@target</a> to ElementType.PARAMETER, ElementType.ANNOTATION_TYPE</li>
+<li>re-use available Annotations <a href="https://github.com/NotNull" class="user-mention">@NotNull</a>
+</li>
+</ol><h3>PrameterHandler-Class</h3>
+
+<pre><code>@Named
+@Singleton
+public class CustomParameterHandler implements ParameterHandlerCheck {
+    private final Logger logger = LoggerFactory.getLogger(CustomParameterHandler.class);
+
+    @Override
+    public void check(final MethodParameter methodParameter) {
+        CustomParameter customParameter = methodParameter.getAnnotation(CustomParameter.class);
+        if (isValid(methodParameter.getObject())) {
+            IllegalArgumentException e = new IllegalArgumentException(customParameter.message());
+            throw new ParameterCheckException(e);
+        }
+    }
+
+    private void isValid(Object object) {
+        return false;
+    }
+}
+</code></pre>
+
+<h2>Available Annotations</h2>
+
+<h3>NotNull</h3>
+
+<p>Check if the Parameter is not null.</p>
+
+<h3>NotEmpty</h3>
+
+<p>Check if the Parameter is not empty. Supported-Classes: Collection, Map, String</p>
+
+<h3>Range</h3>
+
+<p>Check if the Number is in a valid Range.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Parametercheck maintained by <a href="https://github.com/krizi">krizi</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
