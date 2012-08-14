@@ -21,6 +21,7 @@
 		<junit.version>4.10</junit.version>
 		<commons-collections.version>3.2.1</commons-collections.version>
 		<commons-lang.version>3.1</commons-lang.version>
+		<javax-inject.version>1</javax-inject.version>
 	</properties>
 
 	<profiles>
@@ -48,16 +49,16 @@
 						<target>${java.version}</target>
 					</configuration>
 				</plugin>
-<!-- 				<plugin> -->
-<!-- 					<artifactId>maven-surefire-plugin</artifactId> -->
-<!-- 					<version>2.12.1</version> -->
-<!-- 					<configuration> -->
-<!-- 						<argLine> -->
-<!-- 							-javaagent:"${settings.localRepository}"/com/googlecode/jmockit/jmockit/${jmockit.version}/jmockit-${jmockit.version}.jar -->
-<!-- 							-javaagent:"${setting.localRepository}"/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar							 -->
-<!-- 						</argLine> -->
-<!-- 					</configuration> -->
-<!-- 				</plugin> -->
+				<!-- <plugin> -->
+				<!-- <artifactId>maven-surefire-plugin</artifactId> -->
+				<!-- <version>2.12.1</version> -->
+				<!-- <configuration> -->
+				<!-- <argLine> -->
+				<!-- -javaagent:"${settings.localRepository}"/com/googlecode/jmockit/jmockit/${jmockit.version}/jmockit-${jmockit.version}.jar -->
+				<!-- -javaagent:"${setting.localRepository}"/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar -->
+				<!-- </argLine> -->
+				<!-- </configuration> -->
+				<!-- </plugin> -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-eclipse-plugin</artifactId>
@@ -187,6 +188,11 @@
 				<groupId>commons-collections</groupId>
 				<artifactId>commons-collections</artifactId>
 				<version>${commons-collections.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.inject</groupId>
+				<artifactId>javax.inject</artifactId>
+				<version>${javax-inject.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

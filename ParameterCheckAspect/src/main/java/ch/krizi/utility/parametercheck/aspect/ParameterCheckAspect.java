@@ -4,8 +4,9 @@ import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,11 +32,18 @@ public class ParameterCheckAspect {
 
 	private ParameterHandlerFactory parameterHandlerFactory;
 
+	@Around("execution(public * *(.., @(@ch.krizi.utility.parametercheck.annotation.ParameterCheck *) (*), ..))")
+	public void aroundCheckParams(ProceedingJoinPoint joinPoint) throws Throwable {
+
+		checkParams(joinPoint);
+		joinPoint.proceed();
+	}
+
 	/**
 	 * Matches all Annotation wich are annotated with
 	 * {@link ch.krizi.utility.parametercheck.annotation.ParameterCheck}
 	 */
-	@Before("execution(public * *(.., @(@ch.krizi.utility.parametercheck.annotation.ParameterCheck *) (*), ..))")
+	// @Before("execution(public * *(.., @(@ch.krizi.utility.parametercheck.annotation.ParameterCheck *) (*), ..))")
 	public void checkParams(JoinPoint joinPoint) throws Throwable {
 		List<MethodParameter> methodParameter = JoinPointUtils.createMethodParameter(joinPoint);
 

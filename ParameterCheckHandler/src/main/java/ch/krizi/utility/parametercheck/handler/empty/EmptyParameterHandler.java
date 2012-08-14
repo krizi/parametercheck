@@ -6,13 +6,15 @@ package ch.krizi.utility.parametercheck.handler.empty;
 import java.util.Collection;
 import java.util.Map;
 
+import javax.inject.Named;
+import javax.inject.Singleton;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ch.krizi.utility.parametercheck.annotation.ParameterHandler;
 import ch.krizi.utility.parametercheck.exception.ParameterCheckException;
 import ch.krizi.utility.parametercheck.exception.ParameterHandlerException;
 import ch.krizi.utility.parametercheck.factory.MethodParameter;
@@ -24,7 +26,8 @@ import ch.krizi.utility.parametercheck.handler.ParameterHandlerCheck;
  * @author krizi
  * 
  */
-@ParameterHandler
+@Named
+@Singleton
 public class EmptyParameterHandler implements ParameterHandlerCheck {
 
 	private final Logger logger = LoggerFactory.getLogger(EmptyParameterHandler.class);

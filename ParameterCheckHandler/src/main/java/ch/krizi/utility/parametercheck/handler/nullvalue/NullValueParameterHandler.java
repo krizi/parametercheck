@@ -3,10 +3,12 @@
  */
 package ch.krizi.utility.parametercheck.handler.nullvalue;
 
+import javax.inject.Named;
+import javax.inject.Singleton;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ch.krizi.utility.parametercheck.annotation.ParameterHandler;
 import ch.krizi.utility.parametercheck.exception.ParameterCheckException;
 import ch.krizi.utility.parametercheck.exception.ParameterHandlerException;
 import ch.krizi.utility.parametercheck.factory.MethodParameter;
@@ -21,7 +23,8 @@ import ch.krizi.utility.parametercheck.handler.ParameterHandlerUpdater;
  * @author krizi
  * 
  */
-@ParameterHandler
+@Singleton
+@Named
 public class NullValueParameterHandler implements ParameterHandlerCheck, ParameterHandlerUpdater<Object> {
 
 	private final Logger logger = LoggerFactory.getLogger(NullValueParameterHandler.class);

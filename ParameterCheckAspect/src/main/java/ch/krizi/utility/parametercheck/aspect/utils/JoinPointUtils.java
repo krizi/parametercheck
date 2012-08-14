@@ -6,8 +6,10 @@ package ch.krizi.utility.parametercheck.aspect.utils;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
@@ -56,7 +58,7 @@ public class JoinPointUtils {
 	 */
 	public static void updateMethodParameter(JoinPoint joinPoint, MethodParameter methodParameter, Object updatedObject) {
 		if (logger.isTraceEnabled()) {
-			logger.trace("Arguments before update: {}", joinPoint.getArgs());
+			logger.trace("Arguments before update: {}", Arrays.toString(joinPoint.getArgs()));
 		}
 		Object[] arguments = joinPoint.getArgs();
 		arguments[methodParameter.getParameterIndex()] = updatedObject;
@@ -65,7 +67,7 @@ public class JoinPointUtils {
 					updatedObject);
 		}
 		if (logger.isTraceEnabled()) {
-			logger.trace("Arguments after update: {}", joinPoint.getArgs());
+			logger.trace("Arguments after update: {}", Arrays.toString(joinPoint.getArgs()));
 		}
 	}
 }
