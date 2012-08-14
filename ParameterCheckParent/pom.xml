@@ -31,9 +31,9 @@
 				<activeByDefault>false</activeByDefault>
 			</activation>
 			<properties>
-				<sonar.host.url>
-					http://0.0.0.0:9000/
-				</sonar.host.url>
+				<sonar.host.url>http://0.0.0.0:9000/</sonar.host.url>
+            			<sonar.dynamicAnalysis>true</sonar.dynamicAnalysis>
+		            	<sonar.core.codeCoveragePlugin>cobertura</sonar.core.codeCoveragePlugin>
 			</properties>
 		</profile>
 	</profiles>
