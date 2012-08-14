@@ -11,7 +11,6 @@ import mockit.UsingMocksAndStubs;
 import mockit.integration.junit4.JMockit;
 import mockit.integration.logging.Slf4jMocks;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -34,57 +33,87 @@ public class RangeParameterHandlerTest {
 	private RangeParameterHandler handler;
 
 	@Mocked
-	private Range mockRange;
+	private Min mockMin;
 
-	@Before
-	public void prepare() {
-		new NonStrictExpectations() {
-			{
-				mockMethodParameter.getAnnotation((Class<?>) Range.class);
-				result = mockRange;
-			}
-		};
-	}
+	@Mocked
+	private Max mockMax;
 
 	@Test
 	public void testValidRange() {
-		new NonStrictExpectations() {
-			{
-				mockMethodParameter.getType();
-				result = Integer.class;
-
-				mockMethodParameter.getObject();
-				result = 6;
-
-				mockRange.min();
-				result = 0;
-
-				mockRange.max();
-				result = 10;
-			}
-		};
+		setParameter(Integer.class, 6);
+		setMin(0);
+		setMax(10);
 
 		handler.check(mockMethodParameter);
 	}
 
 	@Test(expected = ParameterCheckException.class)
 	public void testInvalidRange() {
+		setParameter(Integer.class, 16);
+		setMin(0);
+		setMax(10);
+
+		handler.check(mockMethodParameter);
+	}
+
+	@Test
+	public void testValidFloatRange() {
+		setParameter(Float.class, 164.345);
+		setMin(99.242);
+		setMax(164.346);
+
+		handler.check(mockMethodParameter);
+	}
+
+	@Test
+	public void testValidMax() {
+		setParameter(Float.class, 9.999099);
+		setMax(10);
+
+		handler.check(mockMethodParameter);
+	}
+
+	@Test
+	public void testValidMaxMinusNumber() {
+		setParameter(Float.class, -9.999099);
+		setMax(10);
+
+		handler.check(mockMethodParameter);
+	}
+
+	private void setParameter(final Class<?> type, final Object number) {
 		new NonStrictExpectations() {
 			{
 				mockMethodParameter.getType();
-				result = Integer.class;
+				result = type;
 
 				mockMethodParameter.getObject();
-				result = 16;
-
-				mockRange.min();
-				result = 0;
-
-				mockRange.max();
-				result = 10;
+				result = number;
 			}
 		};
+	}
 
-		handler.check(mockMethodParameter);
+	private void setMin(final double value) {
+		new NonStrictExpectations() {
+			{
+				mockMethodParameter.getAnnotation((Class<?>) Min.class);
+				result = mockMin;
+
+				mockMin.value();
+				result = value;
+			}
+		};
+	}
+
+	private void setMax(final double value) {
+		new NonStrictExpectations() {
+			{
+				mockMethodParameter.getAnnotation((Class<?>) Max.class);
+				result = mockMax;
+
+				mockMax.value();
+				result = value;
+			}
+		};
 	}
 }
