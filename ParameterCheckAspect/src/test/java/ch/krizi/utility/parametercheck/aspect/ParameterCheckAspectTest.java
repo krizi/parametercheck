@@ -15,6 +15,7 @@ import mockit.Verifications;
 import mockit.integration.junit4.JMockit;
 
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,7 +38,7 @@ public class ParameterCheckAspectTest {
 
 	@Mocked
 	@Cascading
-	private JoinPoint mockJoinPoint;
+	private ProceedingJoinPoint mockProceedingJoinPoint;
 
 	@Mocked
 	private JoinPointUtils mockJoinPointUtils;
@@ -84,7 +85,7 @@ public class ParameterCheckAspectTest {
 		ArrayList<MethodParameter> list = new ArrayList<MethodParameter>();
 		setMethodParameter(list);
 
-		parameterCheckAspect.checkParams(mockJoinPoint);
+		parameterCheckAspect.aroundCheckParams(mockProceedingJoinPoint);
 	}
 
 	@Test
@@ -97,7 +98,7 @@ public class ParameterCheckAspectTest {
 		list.add(new MethodParameter(0, "myMethod", List.class, null));
 		setMethodParameter(list);
 
-		parameterCheckAspect.checkParams(mockJoinPoint);
+		parameterCheckAspect.aroundCheckParams(mockProceedingJoinPoint);
 
 		// verify logger
 	}
@@ -123,7 +124,7 @@ public class ParameterCheckAspectTest {
 		list.add(mp);
 		setMethodParameter(list);
 
-		parameterCheckAspect.checkParams(mockJoinPoint);
+		parameterCheckAspect.aroundCheckParams(mockProceedingJoinPoint);
 
 		new Verifications() {
 			{
@@ -154,7 +155,7 @@ public class ParameterCheckAspectTest {
 		list.add(new MethodParameter(0, "myMethod", List.class, null));
 		setMethodParameter(list);
 
-		parameterCheckAspect.checkParams(mockJoinPoint);
+		parameterCheckAspect.aroundCheckParams(mockProceedingJoinPoint);
 
 		new Verifications() {
 			{

@@ -32,19 +32,24 @@ public class ParameterCheckAspect {
 
 	private ParameterHandlerFactory parameterHandlerFactory;
 
-	@Around("execution(public * *(.., @(@ch.krizi.utility.parametercheck.annotation.ParameterCheck *) (*), ..))")
-	public void aroundCheckParams(ProceedingJoinPoint joinPoint) throws Throwable {
-
-		checkParams(joinPoint);
-		joinPoint.proceed();
-	}
-
 	/**
 	 * Matches all Annotation wich are annotated with
 	 * {@link ch.krizi.utility.parametercheck.annotation.ParameterCheck}
 	 */
-	// @Before("execution(public * *(.., @(@ch.krizi.utility.parametercheck.annotation.ParameterCheck *) (*), ..))")
-	public void checkParams(JoinPoint joinPoint) throws Throwable {
+	@Around("execution(public * *(.., @(@ch.krizi.utility.parametercheck.annotation.ParameterCheck *) (*), ..))")
+	public Object aroundCheckParams(ProceedingJoinPoint joinPoint) throws Throwable {
+		try {
+			checkParams(joinPoint);
+			return joinPoint.proceed(joinPoint.getArgs());
+		} catch (Throwable t) {
+			if (logger.isErrorEnabled()) {
+				logger.error("unexpected exception...", t);
+			}
+			throw t;
+		}
+	}
+
+	private void checkParams(JoinPoint joinPoint) throws Throwable {
 		List<MethodParameter> methodParameter = JoinPointUtils.createMethodParameter(joinPoint);
 
 		if (!CollectionUtils.isEmpty(methodParameter)) {
