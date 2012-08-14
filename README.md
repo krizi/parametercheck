@@ -1,0 +1,1 @@
+Current Build-Status: [![Build Status](https://buildhive.cloudbees.com/job/krizi/job/parametercheck/badge/icon)](https://buildhive.cloudbees.com/job/krizi/job/parametercheck/)
