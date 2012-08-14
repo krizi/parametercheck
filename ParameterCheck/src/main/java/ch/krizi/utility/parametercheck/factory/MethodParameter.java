@@ -65,6 +65,7 @@ public class MethodParameter {
 	@Override
 	public String toString() {
 		ToStringBuilder builder = new ToStringBuilder(this);
+		builder.append("parameterIndex", parameterIndex);
 		builder.append("name", name);
 		builder.append("class", type);
 		builder.append("object", object);
