@@ -14,7 +14,7 @@ import ch.krizi.utility.parametercheck.factory.MethodParameter;
 import ch.krizi.utility.parametercheck.handler.ParameterHandlerCheck;
 
 /**
- * @author p105324
+ * @author krizi
  * 
  */
 @Singleton

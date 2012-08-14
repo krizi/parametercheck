@@ -19,7 +19,7 @@ import ch.krizi.utility.parametercheck.exception.ParameterCheckException;
 import ch.krizi.utility.parametercheck.factory.MethodParameter;
 
 /**
- * @author p105324
+ * @author krizi
  * 
  */
 @RunWith(JMockit.class)

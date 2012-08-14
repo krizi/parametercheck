@@ -13,7 +13,7 @@ import ch.krizi.utility.parametercheck.annotation.ParameterCheck;
 import ch.krizi.utility.parametercheck.handler.nullvalue.NotNull;
 
 /**
- * @author p105324
+ * @author krizi
  * 
  */
 @ParameterCheck(RangeParameterHandler.class)
